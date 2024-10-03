@@ -1,0 +1,5 @@
+.filtro-buscar-libro{
+    width: calc(100% - 1rem);
+    margin: 0 0.5rem;
+    box-sizing: border-box;
+}

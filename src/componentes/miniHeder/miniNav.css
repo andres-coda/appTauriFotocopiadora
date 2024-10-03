@@ -1,0 +1,73 @@
+.miniNav{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    right: 0;
+    margin-left: auto;
+    padding: 0 0.1rem;
+    background-color: var(--color5);
+    top: 75px;
+    height: auto;
+    max-width: 320px;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+}
+
+.miniNav li{
+    text-decoration: none;
+    margin:1px;
+    color: var(--color1);
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    cursor: pointer;
+}
+
+.miniNav li img{
+    height: 20px;
+    width: 20px;
+}
+
+.miniNav ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.miniNav li:hover{
+    background-color: var(--color4);
+    color: var(--color2);
+    border-radius: 4px;
+}
+
+.miniNav h5{
+    margin: 0;
+    padding: 0 0.5rem;
+    font-size: 1em;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-add{
+    margin: 0.5rem 0;
+    padding: 0.3rem 0.5rem;
+    background-color: var(--color5);
+    color: var(--color1);
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.9em;
+    box-shadow: 1px 1px 1px var(--color1);
+}
+.btn-add:hover{
+    box-shadow: 2px 2px 2px var(--color1);
+    border-radius: 12px;
+    background-color: var(--color4);
+    color: var(--color2);
+}

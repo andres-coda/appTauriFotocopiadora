@@ -1,0 +1,109 @@
+.formulario{
+    background-color: var(--color2);
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+    padding: 0.5rem;
+    border-radius: 4px;
+    width: calc(100% - 1rem);
+    box-sizing: border-box;
+    margin: 0.5rem 0.5rem;
+}
+
+.formulario-h2{
+    padding: 0;
+    margin: 0 !important;
+    width: 100%;
+    text-align: center;
+    
+}
+
+.form-doble{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: start;
+    width: 100%;
+    gap: 1rem;
+}
+
+.formulario-btn{
+    margin: 0.5rem 0;
+    padding: 0.3rem 0.5rem;
+    background-color: var(--color4);
+    color: var(--color2);
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
+
+.formulario-btn:hover{
+    box-shadow: 1px 1px 1px var(--color1);
+    border-radius: 12px;
+}
+
+.formulario-botonera{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.linea {
+    border: none; 
+    height: 1px;
+    background-color: var(--color91);
+    margin: 1rem 0; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-reinglon{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    width: 100%;
+    justify-content: start;
+}
+
+.form-reinglon input{
+    flex: 1;
+    text-align: end;
+    min-width: 0;
+    padding: 0.2rem 0.3rem;
+}
+
+.form-reinglon label{
+    font-size: 0.8em;
+    margin:0 0.5rem;
+}
+
+.error,
+.sugerencia-error{
+    font-size: 0.8em;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: end;
+}
+.error{
+    color: var(--color71);
+}
+
+.sugerencia-error{
+    color: var(--color91);
+}
+
+@media(max-width:250px){
+    .form-reinglon label{
+        font-size: 0.5em;
+        margin:0 0.5rem;
+    }
+}
+
+.formulario select:hover{
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px var(--color1);
+}

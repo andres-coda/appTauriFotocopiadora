@@ -1,0 +1,32 @@
+.pedido-fecha-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin: 1px 0;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.pedido-fecha-container img{
+    width: 20px;
+    height: 20px;
+    margin: 0.2rem 0.8rem;
+}
+
+.pedido-fecha-interno h5,
+.pedido-fecha-interno h6{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+    font-size: 0.9em;
+}
+
+.pedido-fecha-interno h5{
+    font-weight: 650;
+}
+
+.pedido-fecha-interno h6{
+    font-weight: 400;
+}

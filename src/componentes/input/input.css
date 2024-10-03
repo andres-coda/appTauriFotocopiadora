@@ -1,0 +1,76 @@
+.inputs-span{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+    justify-content: end;
+    align-items: end;
+}
+
+.inputs-span span{
+    color: var(--color71);
+    margin: 0.1rem 0;
+    font-size: 0.8em;
+    min-height: 15px;
+}
+
+.inputs-entero{
+    position: relative;
+    width: 100%;
+
+}
+
+.inputs-entero input{
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+    height: 40px;
+    font-size: 1em;
+    padding: 9px 0.5rem 0 0.5rem;
+    border: 1px solid var(--color91);
+    color: var(--color1)
+
+}
+
+.inputs-entero input:focus{
+    border: 1px solid var(--color1);
+   outline: none;
+}
+
+.inputs-entero input:focus + label{
+    font-size: 0.9em;
+    font-weight: 640 !important;
+}
+
+.inputs-entero label{
+    position: absolute;
+    top: 50%;
+    left: 0.5rem;
+    transform: translateY(-50%);
+    color: var(--color1);
+    font-size: 1em;
+    font-weight: 400;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    background-color: transparent;
+    font-size: 1em;
+}
+
+.inputs-entero input:focus + label,
+.inputs-entero input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 0.8em;
+    background-color: var(--color2);
+    padding: 0 0.6rem;
+    transform: translate(15%, -50%);
+}
+
+.inputs-entero input:placeholder-shown + label {
+    font-weight: 330;
+}
+
+.alin-derecha{
+    text-align: end !important;
+}

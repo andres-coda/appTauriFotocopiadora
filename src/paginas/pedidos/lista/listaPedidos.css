@@ -1,0 +1,12 @@
+.ordenar li{
+    font-size: 0.8em;
+    cursor: pointer;
+    margin: 0.1rem 0.3rem;
+    padding: 0.2rem 0.3rem;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.ordenar li:hover{
+    box-shadow: 1px 1px 1px var(--color1);
+}

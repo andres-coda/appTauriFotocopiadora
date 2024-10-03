@@ -1,0 +1,57 @@
+.precios-card-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    width: calc(100% - 1rem);
+    margin: 0.5rem;
+}
+.precios-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width:100%;
+    margin: 0.2rem 0;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+}
+
+.precios-card p{
+    margin: 0;
+    padding: 0.2rem 0.5rem;
+    width: 100%;
+    text-align: start;
+}
+
+.precios-card .alin-derecha{
+    width: auto;
+}
+
+.precios-card:hover{
+    box-shadow: 1px 1px 1px var(--color1);
+}
+
+.editar-normal{
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0.3rem;
+    margin-left: 0.5rem;
+    border: none;
+    height: min-content;
+    color: var(--color1);
+}
+
+.edi-desactivado{
+    color: var(--color8);
+}
+
+.edi-desactivado:hover{
+    box-shadow: none !important;
+    background-color:transparent !important;
+}
+
+.editar-normal:hover{
+    box-shadow: 2px 2px 2px var(--color1);
+    background-color: var(--color3);
+}

@@ -1,0 +1,31 @@
+.usuario-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: calc(100% - 1rem);
+    box-sizing: border-box;
+    margin: 0.5rem;
+    background-color: var(--color6);
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.usuario-card h3,
+.usuario-card p{
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0;
+    text-align: start;
+}
+
+.usuario-card p{
+    font-weight: 500;
+}
+
+.usuario-card h3 img{
+    height: 20px;
+    width: 20px;
+    margin: 0 0.5rem 0 0;
+    vertical-align: middle;
+}

@@ -1,0 +1,73 @@
+.libro-pedido-radio{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0.1rem 0;
+    width: 100%;
+}
+
+.libro-pedido-card:hover{
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px var(--color1);
+}
+
+.libro-pedido-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 4px;
+    margin:0.2rem 0;
+    width: 100%;
+    cursor: pointer;
+    padding:0.3rem;
+    box-sizing: border-box;
+}
+
+.input-retirado,
+.input-pendiente{
+    visibility: hidden;
+}
+
+.retirado{
+    background-color: var(--color6);
+}
+
+.terminado{
+    background-color: var(--color5);
+}
+
+.pendiente{
+    background-color: var(--color7);
+}
+
+.cargando{
+    background-color: var(--color10);
+}
+
+.proceso{
+    background-color: var(--color8);
+}
+
+.libro-pedido-card h4{
+    width:fit-content;
+    padding: 0.5rem;
+    margin: auto 0;
+}
+
+.libro-pedido-card-centro{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.libro-pedido-card-centro h5{
+    font-size: 1em;
+    margin: 0 0.5rem;
+    
+}
+
+.libro-pedido-card-centro p{
+    font-size: 0.8em;
+    margin: 0 0.5rem;
+}

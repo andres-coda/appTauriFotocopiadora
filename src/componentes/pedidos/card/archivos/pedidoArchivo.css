@@ -1,0 +1,40 @@
+.pedido-archivo-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin: 1px 0;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.pedido-archivo-container img{
+    height: 20px;
+    width: 20px;
+    margin: 0.2rem 0.8rem;
+}
+
+.pedido-archivo-interno{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pedido-archivo-interno h5,
+.pedido-archivo-interno h6{    
+    padding: 0 ;
+    text-align: center;
+    width: 100% ;
+    font-size: 0.9em ;
+}
+
+.pedido-archivo-interno h6{
+    margin: 0;
+    font-weight: 400;
+}
+
+.pedido-archivo-interno h5{
+    margin: 0 0.5rem 0 0;
+    font-weight: 500;
+}

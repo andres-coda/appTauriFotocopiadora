@@ -1,0 +1,99 @@
+.lista-escuelas{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    width: calc(100% - 1rem);
+    margin: 0.3rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid black;
+    padding: 0.5rem;
+    position: relative;
+}
+.esc-desactivo{
+    min-height: 150px;
+    overflow: hidden;
+}
+.lista-escuelas h5{
+    margin: 0;
+    padding: 0;
+}
+
+
+.lista-escuelas h6{
+    margin: 0.1rem 0;
+    padding: 0;
+    font-weight: 400;
+    text-align: start;
+    font-size: 0.9em;
+}
+
+.lista-escuelas h6 img{
+    height: 14px;
+    width: 14px;
+    margin: 0 0.3rem 0 0;
+}
+
+.escuela-cursos{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    background-color: var(--color6);
+    width: 100%;
+    border-radius: 4px;
+    margin: 0.2rem 0;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    gap: 0.2rem;
+    cursor: pointer;
+}
+
+.escuela-cursos:hover{
+    box-shadow: 1px 1px 1px var(--color1);
+}
+
+.escuela-cursos p{
+    margin: 0;
+    padding: 0;
+    font-size: 0.8em;
+    text-align: start;
+}
+.escuela-cursos h6{
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+    text-align: center;
+    font-weight: 600;
+}
+
+.escuela-cursos-sup,
+.escuela-cursos-inf{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 0 0.2rem;
+}
+
+.escuela-cursos-inf{
+    background-color: var(--color21);
+    border-radius: 4px;
+}
+
+.escuela-cursos-sup p,
+.escuela-cursos-inf p{
+    font-size: 0.8em;
+    width: 100%;
+    text-align: start;
+    padding: 0.2rem 0;
+    margin: 0;
+}
+
+.escuela-cursos-inf p img{
+    height: 12px;
+    width: 12px;
+}
+
+.escuela-cursos-sup p{
+    font-weight: 500;
+}
+
+

@@ -1,0 +1,32 @@
+.pedido-pesos-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin: 1px 0;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.pedido-pesos-container img{
+    height: 24px;
+    width: 24px;
+    margin: 0.2rem 0.8rem;
+}
+
+.pedido-pesos-interno h5,
+.pedido-pesos-interno h6{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+    font-size: 0.9em;
+}
+
+.pedido-pesos-interno h5{
+    font-weight: 500;
+}
+
+.pedido-pesos-interno h6{
+    font-weight: 400;
+}

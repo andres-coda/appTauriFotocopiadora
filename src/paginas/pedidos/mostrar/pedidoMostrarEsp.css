@@ -1,0 +1,135 @@
+.card-LibroPedido{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    cursor: pointer;
+    background-color: var(--color8);
+    margin: 0.2rem 0.3rem;
+    padding: 0.2rem;
+    border-radius: 4px;
+    width:  calc(100% - 0.6rem);
+    box-sizing: border-box;
+}
+
+.card-LibroPedido:hover{
+    box-shadow: 1px 1px 1px var(--color1);
+}
+
+
+
+.card-LibroPedido p{
+    margin: 0.2rem 0.5rem;
+    text-align: start;
+    font-size: 0.9em;
+    width: calc(100% - 1rem);
+}
+
+.card-libroPedido-cantidad{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.card-libroPedido-cantidad h6{
+    padding: 0.9rem;
+    font-size: 1em;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card-LibroPedido-Superior{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    width: calc(100% - 1rem);
+    margin-top: 0.3rem;
+}
+
+.card-LibroPedido-Superior h6{
+    margin: 0;
+    padding: 0.2rem 0.3rem;
+    font-size: 1em;
+    font-weight: 480;
+    text-align: start;
+}
+
+.card-LibroPedido-Superior p{
+    margin: 0;
+    text-align: start;
+    font-size: 0.9em;
+}
+
+.fecha{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.fecha h5{
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0.4rem;
+    font-weight: 550;
+}
+
+.titulos{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width:  calc(100% - 1rem);
+    margin: 0.5rem;
+}
+
+.titulos ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.titulos li{
+    font-size: 0.8em;
+    border: 1px solid black;
+    background-color: var(--color21);
+    border-radius: 4px;
+    padding: 0.1rem 0.3rem;
+}
+
+.titulos p{
+    margin-bottom: 1rem;
+}
+
+.titulos h5 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1em;
+}
+
+.retirado{
+    background-color: var(--color6);
+}
+
+.terminado{
+    background-color: var(--color5);
+}
+
+.pendiente{
+    background-color: var(--color7);
+}
+
+.cargando{
+    background-color: var(--color10);
+}
+

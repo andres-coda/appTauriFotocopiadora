@@ -1,0 +1,33 @@
+.especificaciones-container ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-radius: 4px;
+}
+
+.especificaciones-container li{
+    border-radius: 4px;
+    background-color: var(--color21);
+    padding: 0.2rem 0.4rem;
+    font-size: 0.8em;
+    margin: 1px 0;
+    text-align: start;
+}
+
+.especificaciones-horizontal{
+    width: 100%;
+  }
+  .especificaciones-horizontal ul{
+    flex-direction: row !important;
+    width: 100%;
+    justify-content: space-around !important;
+  }
+  
+  .especificaciones-horizontal li{
+    flex-grow: 1 !important;
+    margin: 0.2rem 0.5rem !important;
+    text-align: center !important;
+  }

@@ -1,0 +1,102 @@
+.btn-formulario{
+    margin: 0.5rem 0;
+    padding: 0.5rem 0.8rem;
+    background-color: var(--color4);
+    color: var(--color2);
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
+
+.btn-formulario:hover{
+    box-shadow: 1px 1px 1px var(--color1);
+    border-radius: 12px;
+}
+
+.btn-cerrar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    z-index: 920;
+    background-color: transparent;
+    color: var(--color1);
+    border: none;
+    padding: 0;
+}
+
+.btn-cerrar img,
+.btn-editar img,
+.btn-add img,
+.btn-eliminar img{
+    height: 20px;
+    width: 20px;
+}
+
+.btn-cerrar:hover{
+    background-color:  none;
+    border: 1px solid var(--color1);
+    border-radius: 50px;
+    box-shadow: 1xp 1px 1px var(--color1);
+}
+
+.btn-editar{
+    position: absolute;
+    z-index: 0;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid var(--color1);
+    background-color: var(--color5);
+    padding: 0.1rem 0.3rem;
+    box-shadow: 1px 1px 1px var(--color1);
+    top:8px;
+    right: 8px; 
+}
+
+.btn-inferior{
+    bottom: 8px;
+    right: 8px;
+}
+
+
+.btn.editar:hover{
+    box-shadow: 2px 2px 2px var(--color1);
+    background-color: var(--color3);
+}
+
+.btn-add{
+    margin: 0.5rem 0;
+    padding: 0.3rem 0.5rem;
+    background-color: var(--color5);
+    color: var(--color1);
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.9em;
+    box-shadow: 1px 1px 1px var(--color1);
+}
+.btn-add:hover{
+    box-shadow: 2px 2px 2px var(--color1);
+    border-radius: 12px;
+    background-color: var(--color4);
+    color: var(--color2);
+}
+
+.btn-eliminar{
+    cursor: pointer;
+    border: none;
+    box-shadow: 1px 1px 1px var(--color1);
+    border-radius: 4px;
+    padding: 0 0.5rem;
+    border-radius: 4px;
+    padding: 0 0.3rem;
+}
+
+.btn-eliminar:hover{
+    background-color: var(--color10);
+    box-shadow: 1px 1px 1px var(--color1);
+}
