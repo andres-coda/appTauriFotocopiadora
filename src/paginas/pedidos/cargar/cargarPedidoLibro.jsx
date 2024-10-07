@@ -3,73 +3,14 @@ import './pedidoCargar.css'
 import { contexto } from "../../../contexto/contexto";
 import Inputs from "../../../componentes/input/input";
 import LibroBuscar from "../../libro/buscarLibro/libroBuscar";
+import usePedidoForm from "../../../hooks/pedido/cargar/usePedidoForm";
+import { pedidoInicial } from "../../../hooks/pedido/cargar/pedidoFormDefault";
 
-function CargarPedidoLibro({ pedidoActual, setAlertaNew }) {
-    const { datos, pedidos, setPedidos,currentPedidoIndex } = useContext(contexto);
-    const [ pedidoLibroPrueba, setPedidoLibroPrueba ] = useState(pedidoActual.pedidoLibro);
+function CargarPedidoLibro({ setAlertaNew }) {
+  const {pedidos, currentPedidoIndex, datos } = useContext(contexto);
 
-    useEffect(() => {
-      setPedidoLibroPrueba(pedidoActual.pedidoLibro);
-    }, [pedidoActual]);
-    const handleOnChange = (e) => {
-      const { name, value } = e.target;
-      const updatedPedidoLibro = { ...pedidoLibroPrueba, [name]: value };
-      setPedidoLibroPrueba(updatedPedidoLibro);
-      const updatedPedidos = [...pedidos];
-    updatedPedidos[currentPedidoIndex] = {
-      ...pedidoActual,
-      pedidoLibro: updatedPedidoLibro
-    };
-    setPedidos(updatedPedidos);
-  }; 
+  const { handleSelecEspecificaciones, onChangePedido } = usePedidoForm()
   
-    const handleSelectionChange = (esp) => {
-      const espQueNo = [];
-      
-      switch (esp.idEspecificaciones) {
-          case 1:
-              espQueNo.push(datos.especificaciones[1]);
-              break;
-          case 2:
-              espQueNo.push(datos.especificaciones[0]);
-              break;
-          case 3:
-              espQueNo.push(datos.especificaciones[3], datos.especificaciones[4]);
-              break;
-          case 4:
-              espQueNo.push(datos.especificaciones[2], datos.especificaciones[4]);
-              break;
-          case 5:
-              espQueNo.push(datos.especificaciones[2], datos.especificaciones[3]);
-              break;
-          case 6:
-              espQueNo.push(datos.especificaciones[6]);
-              break;
-          case 7:
-              espQueNo.push(datos.especificaciones[5]);
-              break;
-          default:
-              break;
-      }     
-  
-      let nuevaEspecificacion;
-      if (pedidoActual.especificaciones.includes(esp)) {
-          nuevaEspecificacion = pedidoActual.especificaciones.filter(item => item !== esp);
-      } else {
-          nuevaEspecificacion = pedidoActual.especificaciones.filter(item => !espQueNo.includes(item));
-          nuevaEspecificacion.push(esp);
-      }
-
-      const updatedPedidoLibro = {...pedidoActual.pedidoLibro, especificaciones:nuevaEspecificacion};
-      const updatedPedidos = [...pedidos];
-      updatedPedidos[currentPedidoIndex] = { 
-        ...pedidoActual, 
-        especificaciones:nuevaEspecificacion, 
-        pedidoLibro:updatedPedidoLibro 
-      };
-      setPedidos(updatedPedidos);
-  };
-    
     return (
       <>
         <LibroBuscar setAlertaNew={setAlertaNew} />
@@ -78,8 +19,8 @@ function CargarPedidoLibro({ pedidoActual, setAlertaNew }) {
           name={'cantidad'}
           texto={'Cantidad de libros'}
           tipo={'text'}
-          handleOnChange={(e)=>handleOnChange(e)}
-          valor={pedidoLibroPrueba.cantidad}
+          handleOnChange={(e)=>onChangePedido(e)}
+          valor={pedidos[currentPedidoIndex].pedidoLibro.cantidad || pedidoInicial.pedidoLibro.cantidad}
           clase={'alin-derecha'}
         />     
         <ul className='especificaciones'>
@@ -89,8 +30,8 @@ function CargarPedidoLibro({ pedidoActual, setAlertaNew }) {
                 <input 
                   id={esp.nombre}
                   type="checkbox" 
-                  checked={pedidoActual.especificaciones.includes(esp)}
-                  onChange={() => handleSelectionChange(esp)} 
+                  checked={pedidos[currentPedidoIndex].especificaciones.includes(esp)}
+                  onChange={() => handleSelecEspecificaciones(esp)} 
                   className='especificacion-checkbox'
                 /> 
                 {esp.nombre}
@@ -102,8 +43,8 @@ function CargarPedidoLibro({ pedidoActual, setAlertaNew }) {
           name={'extras'}
           texto={'Detalles extras del pedido'}
           tipo={'text'}
-          handleOnChange={(e)=>handleOnChange(e)}
-          valor={pedidoLibroPrueba.extras}
+          handleOnChange={(e)=>onChangePedido(e)}
+          valor={pedidos[currentPedidoIndex].pedidoLibro.extras || pedidoInicial.pedidoLibro.extras}
         /> 
       </>
     )

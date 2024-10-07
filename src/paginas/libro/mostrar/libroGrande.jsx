@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import '../card/libroSuperCard.css';
+import './libroMostrar.css';
 import { contexto } from '../../../contexto/contexto';
 import { useNavigate } from 'react-router-dom';
 import MiniNav from '../../../componentes/miniHeder/miniNav';
@@ -24,7 +24,8 @@ function LibroGrande() {
 
   const handleEditar= ()=>{
     const libroAEditar=datos.libroActual;
-    setDatos((prev) => ({ ...prev, libroAeditar: libroAEditar }))
+    setDatos((prev) => ({ ...prev, libroAEditar: libroAEditar }))
+    console.log(libroAEditar)
     setAlertaEditar(true);
   }
 
@@ -71,7 +72,7 @@ function LibroGrande() {
         }
       />
         <LibroSuperCard libro={datos.libroActual}/>
-        <div className={`superCard-libro`}>
+        <div className={`libro-pedidos-estados`}>
           {datos.libroActual.stock
             ?.sort((a,b)=>a.estado.idEstadoPedido-b.estado.idEstadoPedido)
             .map((stock, index) => (
@@ -82,7 +83,7 @@ function LibroGrande() {
           isAlerta={alertaEditar}
           setIsAlerta={setAlertaEditar}
           children={
-            <LibroCargar />
+            <LibroCargar setAlerta={setAlertaEditar}/>
         }
       />
       <AlertaFormulario
@@ -90,7 +91,7 @@ function LibroGrande() {
         setIsAlerta={setAlertaEliminar}
         children={
           <AlertaEliminar 
-            titulo={`¿Seguro que quiere eliminar el libro ${datos.libroActual.nombre}?`}
+            children={<h6>{`¿Seguro que quiere eliminar el libro ${datos.libroActual.nombre}?`}</h6>}
             setEliminar={setAlertaEliminar}
             handleEliminar={handleEliminar}
             error={error}

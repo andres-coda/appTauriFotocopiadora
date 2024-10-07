@@ -5,18 +5,18 @@ import { rutaPrivada, rutaPublica } from "./rutas/rutas";
 import AuthGuard from "./rutas/authGuard";
 import RutaFalsa from "./rutas/rutaFalsa";
 import { lazy, Suspense } from "react";
-import Cargando from "./componentes/cargando/cargando";
+import CargandoInicial from "./componentes/cargando/cargandoInicial";
 
 const UsuarioMayor = lazy(()=> import('./paginas/usuario/usuarioMayor'))
 const RutasPrivadas = lazy(()=> import('./rutas/rutasPrivadas'))
 
 function App() {
   return (
-    <Suspense fallback={<Cargando />}>
-
+    
     <BrowserRouter>
     <Heder />
       <div className='conteiner-parcial'>
+    <Suspense fallback={<CargandoInicial />}>
         <RutaFalsa 
           children={
             <>
@@ -28,9 +28,9 @@ function App() {
             </>
           }
           />
+    </Suspense>
     </div>
     </BrowserRouter>
-    </Suspense>
   );
 }
 

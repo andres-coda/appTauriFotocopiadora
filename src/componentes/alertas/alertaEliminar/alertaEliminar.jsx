@@ -1,10 +1,10 @@
 import Botonera from "../../../componentesStilos/botonera/botonera";
 import BotonFormulario from "../../../componentesStilos/botones/botonFormulario";
 
-function AlertaEliminar({ titulo, setEliminar, handleEliminar, error }) {
+function AlertaEliminar({ children, setEliminar, handleEliminar, error }) {
   return (
     <>
-      <h6>{titulo}</h6>
+        {children}
         <Botonera
           children={
             <>

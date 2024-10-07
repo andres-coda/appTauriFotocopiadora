@@ -30,7 +30,8 @@ export const pedidoInicial = {
   
   export const nuevoPedidoCreacion = (setCurrentIndex, setPedidos, pedidos) => {
     const newPedidos = pedidos;
-    newPedidos.push(pedidoInicial);
+    const pedidoActual = pedidoInicial;
+    newPedidos.push(pedidoActual);
     setPedidos(newPedidos);
     const newIndex = newPedidos.length -1;
     setCurrentIndex(newIndex)

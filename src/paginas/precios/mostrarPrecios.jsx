@@ -39,7 +39,7 @@ function MostrarPrecios() {
         isAlerta={isAlerta}
         setIsAlerta={setIsAlerta}
         children={
-          <CargarPrecio setIsAlerta={setIsAlerta} />
+          <CargarPrecio />
         }
       />
     </>

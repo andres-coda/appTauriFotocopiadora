@@ -57,6 +57,7 @@ const handleFiltrosOrdenar=()=>{
       <h2 className='titulos'>Lista de pedidos</h2>
       <ListaFiltros lista={filtros} />
       <ListaFiltros lista={filtroOrdenar} ordenar={true} />
+      <div className='pedido-conteiner'>
       {
         datos.listaPedidoLibros 
         ? (
@@ -74,6 +75,7 @@ const handleFiltrosOrdenar=()=>{
           )
         ) : ( <p>Aplicar filtros para que aparezcan los pedidos</p> ) 
       }
+      </div>
       <AlertaFormulario
         isAlerta={alertaFiltro}
         setIsAlerta={setAlertaFiltro}

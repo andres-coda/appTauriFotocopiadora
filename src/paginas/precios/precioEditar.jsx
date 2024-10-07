@@ -38,17 +38,17 @@ function EditarPrecio({ precio }) {
           <p>$ {precio.tipo}: </p>
           <p className='alin-derecha'>${precio.importe}</p>
           <BotonEditar 
-            clase={'editar-normal'}
+            clase={'btn-editar-normal'}
             onClick={() =>{console.log(precio), setEditPrecio(true)}}
             titulo={'Editar precio'}
           />
           {precio.idPrecios > 8 
             ? <BotonEliminar 
-                clase={'editar-normal'}
+                clase={'btn-editar-normal'}
                 onClick={() => setEliminar(true)}
               />
             : <BotonEliminar 
-                clase={'editar-normal edi-desactivado'}
+                clase={'btn-editar-normal edi-desactivado'}
               />
           }
         </div>
@@ -59,7 +59,6 @@ function EditarPrecio({ precio }) {
         children={
           <CargarPrecio
             precioAeditar={precio}
-            setIsAlerta={setEditPrecio}
           />
         }
       />
@@ -68,7 +67,7 @@ function EditarPrecio({ precio }) {
         setIsAlerta={setEliminar}
         children={
             <AlertaEliminar 
-            titulo={`Confirmar eliminar el precio ${precio.tipo}`}
+            children={<h6>{`Confirmar eliminar el precio ${precio.tipo}`}</h6>}
             setEliminar={setEliminar}
             handleEliminar={handleEliminar}
             />

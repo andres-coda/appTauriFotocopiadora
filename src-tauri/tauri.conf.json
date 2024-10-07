@@ -21,14 +21,14 @@
     "windows": [
       {
         "title": "delivery-copy-pedidos",
-        "width": 320,
-        "height": 600,
+        "maxWidth": 321,
         "minWidth": 250,
         "minHeight": 350,
-        "maxWidth": 320,
+        "width": 320,
+        "height": 600,
+        "fullscreen": false,
         "resizable": true,
         "decorations": true,
-        "fullscreen": false,
         "visible": true,
         "alwaysOnTop": true
       }

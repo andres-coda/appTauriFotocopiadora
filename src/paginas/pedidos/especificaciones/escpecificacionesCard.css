@@ -14,7 +14,7 @@
     padding: 0.2rem 0.4rem;
     font-size: 0.8em;
     margin: 1px 0;
-    text-align: start;
+    text-align: left;
 }
 
 .especificaciones-horizontal{
@@ -28,6 +28,9 @@
   
   .especificaciones-horizontal li{
     flex-grow: 1 !important;
-    margin: 0.2rem 0.5rem !important;
+    margin: 0.2rem !important;
     text-align: center !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }

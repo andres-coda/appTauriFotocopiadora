@@ -68,7 +68,7 @@ function FiltrosLibros({setFuncion, setFiltros, setAlertaFiltro, filtros}) {
     <FiltroEstilo
       childrenBtn={
         <BotonFormulario
-          textBtn={Filtrar}
+          textBtn={'Filtrar'}
           onClick={handleFiltrar}
         />
       }

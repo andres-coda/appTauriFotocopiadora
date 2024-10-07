@@ -7,8 +7,8 @@ function AlertaFormulario({ children, isAlerta, setIsAlerta}) {
   const {datos, setDatos} = useContext(contexto);
     const handleCerrarForm =  () => {
       setIsAlerta(false);
-      if(datos.libroAeditar||datos.clienteAEditar) {
-        setDatos((prev)=>({...prev, libroAeditar:null, clienteAEditar:null}))
+      if(datos.libroAEditar||datos.clienteAEditar) {
+        setDatos((prev)=>({...prev, libroAEditar:null, clienteAEditar:null}))
       }
     }
 

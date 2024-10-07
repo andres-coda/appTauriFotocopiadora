@@ -3,7 +3,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    right: 0;
     margin-left: auto;
     padding: 0 0.1rem;
     background-color: var(--color5);
@@ -12,7 +11,7 @@
 .nav-parcial{
     top: 0;
     height: 73px;
-    max-width: 320px;
+    max-width: 800px;
     width: 100%;
     z-index: 100;
     position: absolute;
@@ -21,7 +20,7 @@
 .miniNav{
     top: 75px;
     height: auto;
-    max-width: 320px;
+    max-width: 800px;
     width: 100%;
     position: fixed;
     z-index: 1;

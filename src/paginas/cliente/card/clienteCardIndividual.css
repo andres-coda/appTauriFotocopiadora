@@ -22,6 +22,7 @@
     flex-direction: column;
     box-sizing: border-box;
     margin: 0.5rem 0;
+    width: 100%;
 }
 
 .cliente-estados-individual p{
@@ -30,6 +31,9 @@
     cursor: pointer;
     text-align: start;
     padding: 0.2rem 1rem;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
 }
 
 .cliente-estados-individual p:hover{

@@ -39,7 +39,7 @@ function UsuarioCard({ user, editar }) {
         setIsAlerta={setAlerta}
         children={
           <AlertaEliminar
-            titulo={`Seguro que desea cambiar de rol al usuario ${user.email}?`}
+            children={<h6>{`Seguro que desea cambiar de rol al usuario ${user.email}?`}</h6>}
             setEliminar={setAlerta}
             handleEliminar={handleCambiarRolUser}
             error={error}

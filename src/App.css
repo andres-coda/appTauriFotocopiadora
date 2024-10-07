@@ -34,7 +34,7 @@ body {
   margin: 0;
   display: block;
   align-items: center;
-  min-width: 200px;
+  min-width: 250px;
   height: 100vh;
   overflow: hidden;
   background-color: var(--color2);
@@ -47,7 +47,7 @@ body {
   padding: 0;
   text-align: center;
   display: flex;
-  justify-content: end;
+  justify-content: center;
   align-items: top;
 } 
 
@@ -86,7 +86,7 @@ body {
   margin-bottom: 0;
   margin-left: 0;
   margin-right: 0;
-  max-width: 320px;
+  max-width: 800px;
   min-width: 250px;
   width: 100%;
   min-height: 25vh;

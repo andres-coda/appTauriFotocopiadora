@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import './mostrarPrecios.css'
 import { isFiniteNumber } from '../../funciones/utilidades.function';
-import { crearPrecio, editarPrecio } from '../../servicios/precios.service';
 import Cargando from '../../componentes/cargando/cargando';
 import Formulario from '../../componentes/formulario/formulario';
 import Inputs from '../../componentes/input/input';
+import usePutApi from '../../hooks/Api/usePutApi';
+import { URL_PRECIOS } from '../../endPoint/endpoint.ts';
+import usePostApi from '../../hooks/Api/usePostApi';
 
 const errorInicial = {
   error: '',
@@ -12,19 +14,24 @@ const errorInicial = {
   tipo: ''
 };
 
-function CargarPrecio({ setIsAlerta, precioAeditar }) {
+const url = URL_PRECIOS;
+
+function CargarPrecio({ precioAeditar }) {
+  const {postData, loading, error, response } = usePostApi(url);
+  const {putData, loading:loadingPut, error:errorPut, response:responsePut} = usePutApi( 
+    precioAeditar ? `${url}/${precioAeditar.idPrecios}` : ``);
+
   const [newPrecio, setNewPrecio] = useState({
     tipo: precioAeditar ? precioAeditar.tipo : '',
     importe: precioAeditar ? precioAeditar.importe: '',
   });
-  const [cargando, setCargando] = useState(false);
-  const [textCargando, setTextCargando] = useState('Procesando la carga de precio')
+
   const [clasError, setClasError] = useState('sugerencia-error');
-  const [errorFetch, setErrorFetch] = useState('');
-  const [error, setError] = useState({
+  const [errorVerif, setErrorVerif] = useState({
     ...errorInicial,
     error: 'Debe completar todos los campos'
   });
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setNewPrecio({
@@ -32,6 +39,7 @@ function CargarPrecio({ setIsAlerta, precioAeditar }) {
       [name]: value
     })
   };
+
   const validarError = () => {
     const newError = errorInicial;
     if (!newPrecio.tipo) {
@@ -48,24 +56,37 @@ function CargarPrecio({ setIsAlerta, precioAeditar }) {
 
   const handleGuardar = async () => {
     const errores = validarError();
+
     if (errores) {
-      setError(errores);
-      setTextCargando(errores.error)
+      setErrorVerif(errores);
       setClasError('');
       return
     }
-    setCargando(true);
-    const precioActualizado = precioAeditar
-      ? editarPrecio(precioAeditar.idPrecios, newPrecio, setErrorFetch)
-      : crearPrecio(newPrecio, setErrorFetch);
-    if (precioActualizado) {
-      setIsAlerta(false);
-      setCargando(false);
+
+    if (precioAeditar) {
+      putData(newPrecio)
+    } else {
+      postData(newPrecio);
     }
   }
 
-  if (cargando) return (
-    <Cargando text={textCargando} error={errorFetch} />
+  if (response || responsePut) {
+    return (
+      <Cargando text={response ? `Precio creado con exito` : `Precio actualizado con exito`}/>
+    )
+  }
+
+  if (loading || loadingPut) return (
+    <Cargando text={
+       loading ? 'Creando nuevo precio ...' : 'Actualizando precio ...'} />
+  )
+
+  if (error || errorPut) return (
+    <Cargando 
+      text={
+        error ? error : errorPut
+      }
+    />
   )
 
   return (
@@ -73,7 +94,7 @@ function CargarPrecio({ setIsAlerta, precioAeditar }) {
       handleForm={(e) => { handleGuardar(e) }}
       textBtn={'Confirmar'}
       subtitulo={precioAeditar? 'Editar precio' : 'Nuevo precio'}
-      error={error.error}
+      error={errorVerif.error}
       classError={clasError}
       children={
         <>
@@ -82,7 +103,7 @@ function CargarPrecio({ setIsAlerta, precioAeditar }) {
             texto={'Nombre del precio'}
             tipo={'text'}
             valor={newPrecio.tipo}
-            error={error.tipo}
+            error={errorVerif.tipo}
             handleOnChange={(e) => handleOnChange(e)}
           />
           <Inputs
@@ -90,7 +111,7 @@ function CargarPrecio({ setIsAlerta, precioAeditar }) {
             texto={'Importe'}
             tipo={'text'}
             valor={newPrecio.importe}
-            error={error.importe}
+            error={errorVerif.importe}
             handleOnChange={(e) => handleOnChange(e)}
           />
         </>

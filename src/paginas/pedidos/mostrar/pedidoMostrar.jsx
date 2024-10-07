@@ -205,7 +205,7 @@ function PedidoMostrar() {
             children={
               <AlertaEliminar 
                 setEliminar={setAlertaEliminar}
-                titulo={'¿Seguro de que quiere eliminar el pedido de la lista?'}
+                children={<h6>{'¿Seguro de que quiere eliminar el pedido de la lista?'}</h6>}
                 handleEliminar={handleEliminar}
                 error={error}
               />

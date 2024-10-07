@@ -34,8 +34,9 @@
 .btn-editar img,
 .btn-add img,
 .btn-eliminar img{
-    height: 20px;
-    width: 20px;
+    height: 20px !important;
+    width: 20px !important;
+    margin: 0 !important;
 }
 
 .btn-cerrar:hover{
@@ -43,6 +44,19 @@
     border: 1px solid var(--color1);
     border-radius: 50px;
     box-shadow: 1xp 1px 1px var(--color1);
+}
+
+.btn-eliminar{
+    cursor: pointer;
+    border: none;
+    box-shadow: 1px 1px 1px var(--color1);
+    border-radius: 4px;
+    padding: 0 0.5rem !important;
+}
+
+.btn-eliminar:hover{
+    background-color: var(--color10);
+    box-shadow: 1px 1px 1px var(--color1);
 }
 
 .btn-editar{
@@ -56,6 +70,22 @@
     box-shadow: 1px 1px 1px var(--color1);
     top:8px;
     right: 8px; 
+    color: var(--color1);
+}
+
+.btn-editar-normal{
+    padding: 0.3rem 0.3rem 0.2rem 0.3rem;
+    margin-left: 0.5rem;
+    border: none;
+    height: min-content;
+    position:unset;
+    top: auto;
+    right: auto;
+}
+
+.btn-editar-normal img{
+    height: 16px;
+    width: 16px;
 }
 
 .btn-inferior{
@@ -64,7 +94,8 @@
 }
 
 
-.btn.editar:hover{
+.btn.editar:hover,
+.btn-editar-normal:hover{
     box-shadow: 2px 2px 2px var(--color1);
     background-color: var(--color3);
 }
@@ -86,17 +117,12 @@
     color: var(--color2);
 }
 
-.btn-eliminar{
-    cursor: pointer;
-    border: none;
-    box-shadow: 1px 1px 1px var(--color1);
-    border-radius: 4px;
-    padding: 0 0.5rem;
-    border-radius: 4px;
-    padding: 0 0.3rem;
+.edi-desactivado{
+    background-color: var(--color8);
+    box-shadow: none;
 }
 
-.btn-eliminar:hover{
-    background-color: var(--color10);
-    box-shadow: 1px 1px 1px var(--color1);
+.edi-desactivado:hover{
+    box-shadow: none !important;
+    background-color: var(--color8) !important;
 }

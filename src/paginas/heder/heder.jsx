@@ -14,43 +14,18 @@ import Cancelar from '../../assets/cancel.svg'
 import { contexto } from '../../contexto/contexto';
 import { Link } from 'react-router-dom';
 import { rutaPublica, rutasGenerales } from '../../rutas/rutas';
-import { eliminarPedidoCreacion, nuevoPedidoCreacion } from '../../funciones/manejoPedido.function';
+import usePedidoUtilidades from '../../hooks/pedido/cargar/usePedidoUtilidades';
 
 function Heder() {
   const [menu, setMenu] = useState(false);
-  const { pedidos, currentPedidoIndex, userLogin, setCurrentPedidoIndex, setPedidos } = useContext(contexto);
+  const { pedidos, currentPedidoIndex, userLogin } = useContext(contexto);
   const [claseActiva, setClaseActiva] = useState('');
+
+  const {nuevoPedido, pedidoAnterior, pedidoSiguiente, eliminarPedido} = usePedidoUtilidades();
 
   const handleClaseActiva = (clase) => {
     setClaseActiva(clase);
   }
-
-  const handleNewPedido = () => {
-    nuevoPedidoCreacion(setCurrentPedidoIndex, setPedidos, pedidos);
-    setClaseActiva('activa');
-  }
-
-  const handleNext = () => {
-    if (currentPedidoIndex < pedidos.length - 1) {
-      setCurrentPedidoIndex(currentPedidoIndex + 1);
-    } else {
-      setCurrentPedidoIndex(0);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentPedidoIndex > 0) {
-      setCurrentPedidoIndex(currentPedidoIndex - 1);
-    } else {
-      const newIndex = pedidos.length -1;
-      setCurrentPedidoIndex(newIndex);
-    }
-  };
-
-  const handleDelete = (e) => {
-    e.preventDefault();
-    eliminarPedidoCreacion(pedidos, setPedidos, setCurrentPedidoIndex, currentPedidoIndex);
-  };
 
   return (
   <nav className="nav-parcial">
@@ -58,7 +33,7 @@ function Heder() {
       <Link 
         to={rutasGenerales.PEDIDONUEVO} 
         title='Nuevo pedido'
-        onClick={() => { handleNewPedido(), handleClaseActiva('pedido-nuevo'), setMenu(false) }}
+        onClick={(e) => { nuevoPedido(e), handleClaseActiva('pedido-nuevo'), setMenu(false) }}
         className={claseActiva == 'pedido-nuevo' ? 'activa' : ''}
       >
         <img src={Nuevo} alt={'Nuevo pedido'}/>
@@ -141,10 +116,10 @@ function Heder() {
         ) : (null) }
         {pedidos?.length > 0 ? (
         <div className="nav-parcial-inferior">
-          <Link onClick={handlePrevious} title='Pedido anterior'><img src={ArrowLeft} alt='Pedido anterior' /></Link>
-          <Link onClick={handleNext} title='Pedido siguiente'><img src={ArrowRifht} alt='Pedido siguiente' /></Link>
+          <Link onClick={pedidoAnterior} title='Pedido anterior'><img src={ArrowLeft} alt='Pedido anterior' /></Link>
+          <Link onClick={pedidoSiguiente} title='Pedido siguiente'><img src={ArrowRifht} alt='Pedido siguiente' /></Link>
           <Link to={rutasGenerales.PEDIDONUEVO} title='Pedidos'>{`${currentPedidoIndex + 1} de ${pedidos?.length}`}</Link>
-          <Link onClick={(e)=>handleDelete(e)} title='Cancelar pedido'><img src={Cancelar} alt='Cancelar pedido' /></Link>
+          <Link onClick={(e)=>eliminarPedido(e)} title='Cancelar pedido'><img src={Cancelar} alt='Cancelar pedido' /></Link>
         </div>) : (
         <a>No hay pedidos pendientes</a>
       )}

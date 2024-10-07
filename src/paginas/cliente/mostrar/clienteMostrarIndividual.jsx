@@ -1,33 +1,24 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { contexto } from "../../../contexto/contexto";
-import { useNavigate } from "react-router-dom";
-import { leerClienteActual } from "../../../servicios/cliente.servicie";
 import MiniNav from "../../../componentes/miniHeder/miniNav";
 import LeftArrow from "../../../assets/arrowLeft.svg"
 import Editar from "../../../assets/edit.svg"
-import Cargando from "../../../componentes/cargando/cargando";
+import Eliminar from "../../../assets/deleted.svg"
 import PedidoCard from '../../../componentes/pedidos/card/pedidoCard'
 import ClienteCardIndividual from '../card/clienteCardIndividual'
-import { rutasGenerales } from "../../../rutas/rutas";
+import AlertaFormulario from "../../../componentes/alertas/alertaFormulario/alertaFormulario";
+import AlertaEliminar from "../../../componentes/alertas/alertaEliminar/alertaEliminar";
+import Cargando from "../../../componentes/cargando/cargando";
+import useClienteMostrar from "../../../hooks/cliente/mostrar/useClienteMostrar";
 
 function ClienteMostrarIndividual() {
-  const { datos, setDatos } = useContext(contexto);
-  const [error, setError] = useState({ error: '' });
+  const { datos} = useContext(contexto);
   const [filterPedido, setFilterPedido] = useState(() => (pedido) => true);
-  const navigate = useNavigate();
+  const [alerta, setAlerta] = useState(false);
+  const {handleEditarCliente, error, loading, response, deletedId, handleAtras} = useClienteMostrar();
 
-  useEffect(() => {
-    if (datos.clienteActual) {
-      leerClienteActual(datos.clienteActual.idPersona, setDatos, setError);
-    }
-  }, []);
-
-  const handleEditarCliente = () => {
-    const clienteAEditar = datos.clienteActual;
-    setDatos((prev) => ({ ...prev, clienteAEditar: clienteAEditar }));
-    navigate(rutasGenerales.CLIENTENUEVO);
-  }
-
+  if (!datos.clienteActual) return null
+  
   return (
     <>
       <MiniNav
@@ -35,8 +26,7 @@ function ClienteMostrarIndividual() {
           <>
             <li
               onClick={() => {
-                navigate(-1);
-                setDatos((prev) => ({ ...prev, clienteActual: null }));
+                handleAtras()
               }}
               title='Atras'
               className="btn-add"
@@ -44,32 +34,46 @@ function ClienteMostrarIndividual() {
             <li
               title='Editar cliente'
               className="btn-add"
-              onClick={handleEditarCliente}
+              onClick={()=>{handleEditarCliente()}}
             ><img src={Editar} alt="Editar cliente" /></li>
+            <li
+              title='Eliminar cliente'
+              className="btn-add"
+              onClick={() => setAlerta(true)}
+            ><img src={Eliminar} alt="Eliminar cliente" /></li>
           </>
         }
       />
-      {
-        datos.clienteActual ? (
+      <h3 className="titulo">Datos del cliente</h3>
+      <ClienteCardIndividual cliente={datos.clienteActual} setFilterPedido={setFilterPedido} />
+      <h3 className="subtitulo-cliente">Lista de pedidos</h3>
+      <ul className="cliente-lista-pedidos">
+        {datos.clienteActual?.pedidos
+          ?.filter(filterPedido)
+          .map((pedido, index) =>
+            <li key={`pedido-${index}`}>
+              <PedidoCard pedido={pedido} />
+            </li>
+          )
+        }
+      </ul>
+      <AlertaFormulario
+        isAlerta={alerta}
+        setIsAlerta={setAlerta}
+        children={
           <>
-            <h3 className="titulo">Datos del cliente</h3>
-            <ClienteCardIndividual cliente={datos.clienteActual} setFilterPedido={setFilterPedido} />
-            <h3 className="subtitulo-cliente">Lista de pedidos</h3>
-            <ul className="cliente-lista-pedidos">
-              {datos.clienteActual.pedidos
-                ?.filter(filterPedido)
-                .map((pedido, index) =>
-                  <li key={`pedido-${index}`}>
-                    <PedidoCard pedido={pedido} />
-                  </li>
-                )
-              }
-            </ul>
+            {loading ? <Cargando text={`Eliminando ${datos.clienteActual.nombre || datos.clienteActual.celular}`} /> : null}
+            {error ? <Cargando text={`Error al eliminar a ${datos.clienteActual.nombre || datos.clienteActual.celular}, ${error}`} /> : null}
+            {response ? <Cargando text={`El cliente fue eliminado con exito`} /> : null}
+            {!loading && !error && !response ? (
+              <AlertaEliminar
+                children={<h6>{`¿Desea eliminar el cliente ${datos.clienteActual.nombre || datos.clienteActual.celular}?`}</h6>}
+                setEliminar={setAlerta}
+                handleEliminar={()=>deletedId()}
+              />) : (null)}
           </>
-        ) : (
-          <Cargando />
-        )
-      }
+        }
+      />
     </>
   )
 }

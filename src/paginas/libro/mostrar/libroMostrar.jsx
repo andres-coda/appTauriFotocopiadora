@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './libroMostrar.css'
 import MiniNav from '../../../componentes/miniHeder/miniNav';
 import Reciclar from '../../../assets/recycle.svg'
 import Filtrar from '../../../assets/filter.svg'
@@ -52,6 +53,7 @@ function LibroMostrar() {
       <FiltroBuscarLibro 
         setFuncionBuscar={setBuscador}
       />
+      <div className='lista-libros'>
       <LibroMostrarInterno
         filtros={funcionFiltro}
         buscador={buscador}
@@ -75,6 +77,7 @@ function LibroMostrar() {
           />
         }
       />
+      </div>
   </>
   )
 }

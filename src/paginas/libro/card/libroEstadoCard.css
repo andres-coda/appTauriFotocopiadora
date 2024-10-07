@@ -1,7 +1,7 @@
 .super-estado-card{
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: left;
     align-items: center;
     width: calc(100% - 1rem);
     margin: 0.2rem 0.5rem;
@@ -9,19 +9,26 @@
     border-radius: 4px;
     cursor: pointer;
     background-color: var(--color8);
+    overflow: hidden;
 }
 
 .super-estado-card:hover{
     box-shadow: 1px 1px 1px var(--color1);
 }
 
-.super-estado-card h4{
-    padding: 1.2rem 0;
+.super-estado-titulo{
+    display: flex;
     width: 60px;
-    max-width: 60px;
-    margin: 0;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
+}
+
+.super-estado-titulo h4{
+    width: 100%;
+    margin: 0;    
     text-align: center;
 }
 
@@ -34,8 +41,8 @@
 .super-estado-interno{
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: left;
     width: 100%;
     box-sizing: border-box;
-    padding-bottom: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0;
 }

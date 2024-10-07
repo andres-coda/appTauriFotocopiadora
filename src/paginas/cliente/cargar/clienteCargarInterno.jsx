@@ -1,65 +1,25 @@
-import { useContext, useState } from "react";
-import { contexto } from "../../../contexto/contexto";
 import Inputs from "../../../componentes/input/input";
 import AlertaCoincidencias from '../../../componentes/alertas/alertaCoincidencias/alertaCoincidencias'
 import ClienteCabecera from "../../../componentes/cliente/clienteCabecera/clienteCabecera";
 
-const alertaInicial = { nombre: false, celular: false, email: false };
-const coincidenciaInicial = { nombre: [], celular: [], email: [] };
-
-function ClienteCargarInterno({ persona, setPersona, error }) {
-  const { datos } = useContext(contexto);
-  const [isAlerta, setIsAlerta] = useState(alertaInicial);
-  const [coincidencias, setCoincidencias] = useState(coincidenciaInicial);
-
-  const HandleOnChange = (e) => {
-    const valor = e.target.value;
-    const name = e.target.name;
-
-    setPersona({
-      ...persona,
-      [name]: valor
-    });
-
-    if (valor.length > 2) {
-      const coincidenciaFiltradas = datos.clientes?.filter(cliente =>
-        cliente[name].toLowerCase().includes(valor.toLowerCase())
-      ) || [];
-      setCoincidencias(prev => ({ ...prev, [name]: coincidenciaFiltradas }));
-
-      if (coincidenciaFiltradas?.length > 0) {
-        setIsAlerta(prev => ({ ...prev, [name]: true }));
-      } else {
-        setIsAlerta(prev => ({ ...prev, [name]: false }));
-      }
-    } else {
-      setCoincidencias(prev => ({ ...prev, [name]: [] }));
-      setIsAlerta(prev => ({ ...prev, [name]: false }));
-    }
-  };
-
-  const handleSelect = (cliente) => {
-    setPersona(cliente);
-    setIsAlerta(alertaInicial);
-    setCoincidencias(coincidenciaInicial);
-  }
-  
+function ClienteCargarInterno({ persona, error, handleOnChange, coincidencias, alerta, handleSelec }) {
+ 
   return (
     <>
       <Inputs
         name={'nombre'}
         texto={'Nombre'}
         tipo={'text'}
-        handleOnChange={HandleOnChange}
+        handleOnChange={(e)=>handleOnChange(e)}
         valor={persona.nombre}
         error={error.nombre}
       />
       <AlertaCoincidencias
-        isAlerta={isAlerta.nombre}
+        isAlerta={alerta.nombre}
         children={
           <>
             {coincidencias.nombre.map((cliente, index) => (
-              <li key={`nombre-${index}`} onClick={() => handleSelect(cliente)}>
+              <li key={`nombre-${index}`} onClick={() => handleSelec(cliente)}>
                 <ClienteCabecera cliente={cliente} />
               </li>
             ))}
@@ -70,17 +30,17 @@ function ClienteCargarInterno({ persona, setPersona, error }) {
         name={'celular'}
         texto={'Celular'}
         tipo={'tel'}
-        handleOnChange={HandleOnChange}
+        handleOnChange={(e)=>handleOnChange(e)}
         valor={persona.celular}
         error={error.celular}
       />
       <AlertaCoincidencias
-        isAlerta={isAlerta.celular}
+        isAlerta={alerta.celular}
         children={
           <>
 
             {coincidencias.celular.map((cliente, index) => (
-              <li key={`nombre-${index}`} onClick={() => handleSelect(cliente)}>
+              <li key={`nombre-${index}`} onClick={() => handleSelec(cliente)}>
                 <ClienteCabecera cliente={cliente} />
               </li>
             ))}
@@ -92,17 +52,17 @@ function ClienteCargarInterno({ persona, setPersona, error }) {
         name={'email'}
         texto={'Mail'}
         tipo={'email'}
-        handleOnChange={HandleOnChange}
+        handleOnChange={(e)=>handleOnChange(e)}
         valor={persona.email}
         error={error.email}
       />
       <AlertaCoincidencias
-        isAlerta={isAlerta.email}
+        isAlerta={alerta.email}
         children={
           <>
 
             {coincidencias.email.map((cliente, index) => (
-              <li key={`nombre-${index}`} onClick={() => handleSelect(cliente)}>
+              <li key={`nombre-${index}`} onClick={() => handleSelec(cliente)}>
                 <ClienteCabecera cliente={cliente} />
               </li>
             ))}

@@ -1,4 +1,11 @@
-export const URL_BASE = 'https://api-rest-production-387f.up.railway.app';
+const url_base_Cloud = 'https://deliberycopyapi-139803899249.us-central1.run.app'
+
+const URL_BASE_local = 'http://localhost:3001';
+
+
+const URL_base_railway = "https://api-rest-production-387f.up.railway.app"
+
+export const URL_BASE = URL_BASE_local;
 export const URL_LIBROS = URL_BASE+'/libro';
 export const URL_CLIENTES = URL_BASE+'/persona';
 export const URL_PEDIDOS = URL_BASE+'/pedido';
@@ -18,9 +25,3 @@ export const URL_CURSOS = URL_BASE+'/curso';
 export const URL_USER = URL_BASE+'/usuario';
 export const URL_PROFE_MATERIA = URL_BASE+'/profe-materia';
 
-const url_base_Cloud = 'https://deliberycopyapi-139803899249.us-central1.run.app'
-
-const URL_BASE_local = 'http://localhost:3001';
-
-
-const URL_base_railway = "https://api-rest-production-387f.up.railway.app"

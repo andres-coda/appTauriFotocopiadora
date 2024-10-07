@@ -9,6 +9,7 @@ import AlertaEliminar from '../../../componentes/alertas/alertaEliminar/alertaEl
 import MostrarCursoInterno from '../../escuela/mostrar/mostrarCursoInterno';
 import MostrarProfMat from '../../escuela/mostrar/mostrarProfMat';
 import CargarCurso from '../../escuela/cargar/cargarCurso';
+import MostrarCurso from '../../escuela/mostrar/mostrarCurso';
 
 function LibroSuperCard({ libro }) {
   const { datos, setDatos} = useContext(contexto);
@@ -166,7 +167,7 @@ function LibroSuperCard({ libro }) {
         setIsAlerta={setEliminarAlerta}
         children={
           <AlertaEliminar
-            titulo={`¿Quiere quitar el libro "${libro.nombre? libro.nombre: ''}" de la materia "${cursoEliminar? cursoEliminar.materia?.nombre: ''}" del profesor "${cursoEliminar?cursoEliminar.profesor?.nombre: ''}"?`}
+            children={<h6>{`¿Quiere quitar el libro "${libro.nombre? libro.nombre: ''}" de la materia "${cursoEliminar? cursoEliminar.materia?.nombre: ''}" del profesor "${cursoEliminar?cursoEliminar.profesor?.nombre: ''}"?`}</h6>}
             setEliminar={setEliminarAlerta}
             handleEliminar={handleQuitarCurso}
           />

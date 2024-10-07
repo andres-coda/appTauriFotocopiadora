@@ -9,6 +9,7 @@
     width: calc(100% - 1rem);
     box-sizing: border-box;
     margin: 0.5rem 0.5rem;
+    max-width: 600px;
 }
 
 .formulario-h2{

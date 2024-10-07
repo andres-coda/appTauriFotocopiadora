@@ -31,7 +31,9 @@ function LibroEstadoCard({stock}) {
   if (!stock || stock.cantidad<=0) return null
   return (
     <div className={`super-estado-card`} onClick={handleCardClick}>
-      <h4 className={estadoClas}>{stock.cantidad}</h4>
+      <div className={`super-estado-titulo ${estadoClas}`} >
+      <h4>{stock.cantidad}</h4>
+      </div>
       <div className="super-estado-interno">
 
       <h5>{stock.estado.estado}</h5>

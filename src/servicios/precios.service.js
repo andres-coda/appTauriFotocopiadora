@@ -29,7 +29,7 @@ export const editarPrecio = async (idPrecios, precio, setError) => {
     }
 }
 
-export const eliminarPrecio = async (idPrecios, setError) => {
+export const eliminarPrecio = async (idPrecios, setError, setDatos) => {
     try {
         const newPrecio = await fetchDelete(`${URL_PRECIOS}/${idPrecios}`, setError);
         if (newPrecio) {
