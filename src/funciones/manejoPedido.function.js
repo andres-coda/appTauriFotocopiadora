@@ -1,4 +1,4 @@
-export const pedidoInicial = {
+/*export const pedidoInicial = {
     archivos: "",
     anillados: "",
     fechaEntrega: "",
@@ -58,3 +58,5 @@ export const pedidoInicial = {
     const pedidoActual = pedidos[currentIndex];
     return pedidoActual;
   }
+
+  */

@@ -1,20 +1,27 @@
-import { useContext, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './mostrarEscuela.css'
-import { contexto } from '../../../contexto/contexto';
+import { useGlobalContext } from '../../../contexto/contexto';
 import { useNavigate } from 'react-router-dom';
 import MiniNav from '../../../componentes/miniHeder/miniNav';
 import LeftArrow from '../../../assets/arrowLeft.svg'
 import Add from '../../../assets/add.svg'
 import MostrarEscuelaInterno from './mostrarEscuelaInterno';
-import AlertaFormulario from '../../../componentes/alertas/alertaFormulario/alertaFormulario';
 import CargarEscuela from '../cargar/cargarEscuela';
+import { useModalContext } from '../../../contexto/modalContexto';
+import Modal from '../../../componentes/modal/modal';
 
 function MostrarEscuela() {
-  const [isAlerta, setIsAlerta] = useState(false);
+  const {estadoModal, setEstadoModal} = useModalContext()
   const [escAEditar, setEscAEditar] = useState(null);
-  const { datos } = useContext(contexto);
+  const { datos } = useGlobalContext();
+  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
- 
+
+  const handleEditarEscuela = (esc) => {
+    setModal(true);
+    setEscAEditar(esc);
+    setEstadoModal(true);
+  }
 
   return (
     <>
@@ -26,7 +33,7 @@ function MostrarEscuela() {
               className='btn-add'
             ><img src={LeftArrow} alt='Atras' /></li>
             <li 
-              onClick={() => { setIsAlerta(true), setEscAEditar(null) }}
+              onClick={() => { setEstadoModal(true), setModal(true)}}
               className='btn-add'
               title='Nueva escuela'
             ><img src={Add} alt='Nueva escuela' /></li>
@@ -35,13 +42,10 @@ function MostrarEscuela() {
       />
       <h2 className='formulario-h2'>Lista de escuelas</h2>
       {datos.escuelas?.map((esc, index) => (    
-        <MostrarEscuelaInterno esc={esc} key={`esc-${index}`} />
+        <MostrarEscuelaInterno esc={esc} key={`esc-${index}`} setEscAEditar={handleEditarEscuela} />
       ))}
-      <AlertaFormulario
-          isAlerta={isAlerta}
-          setIsAlerta={setIsAlerta}
-          children={<CargarEscuela setAlerta={setIsAlerta} escAEditar={escAEditar} />}
-        />
+      
+      <Modal children={<CargarEscuela escAEditar={escAEditar} />} modal={modal} setModal={setModal}/>
     </>
   )
 }

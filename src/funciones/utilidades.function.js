@@ -53,6 +53,13 @@ export const formatoFecha = (fecha) => {
   return `${dia}-${mes}-${año}`;
 }
 
+export const formatoHora = ( fecha ) =>{
+  const date = new Date(fecha);
+  const horas = date.getHours();
+  const minutos = date.getMinutes();
+  return `${horas} : ${minutos} hs`
+}
+
 export const obtenerAnioActual = () => {
   return new Date().getFullYear();
 }

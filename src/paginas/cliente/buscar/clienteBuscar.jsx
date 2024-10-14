@@ -22,7 +22,6 @@ function ClienteBuscar({ setFilterCliente }) {
 
   const handleForm = (e) => {
     e.preventDefault();
-    console.log('formulario');
   }
 
   return (

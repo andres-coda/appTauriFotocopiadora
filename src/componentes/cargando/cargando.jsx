@@ -1,7 +1,7 @@
 function Cargando({text, error}){
     return(
         <>
-            <p>{text ? text : 'Cargando...'}</p> 
+            <h6>{text ? text : 'Cargando...'}</h6> 
         </>
     )
 }

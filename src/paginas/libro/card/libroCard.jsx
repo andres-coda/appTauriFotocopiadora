@@ -23,9 +23,7 @@ function LibroCard({ libro }) {
   const handleLibro = async () => {   
     setCargando(true) 
     const libroActual = await leerLibroActual(libro.idLibro, setDatos,setError);
-    if (libroActual) {
-      console.log(libroActual);
-      
+    if (libroActual) {      
       setCargando(false);
       navigate(rutasGenerales.LIBROINDIVIDUAL);
     }

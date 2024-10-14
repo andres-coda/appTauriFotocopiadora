@@ -5,7 +5,7 @@ function useCoinsidencias(datos,  condicion){
     const [alertaCoincidencia, setAlertaCoincidencia] = useState(false);
     
     useEffect(()=>{
-        if (condicion.value.length < 1) {
+        if ( !condicion || !condicion.value || condicion.value.length < 1) {
             setCoincidencias([]);
             setAlertaCoincidencia(false);
             return
@@ -21,6 +21,10 @@ function useCoinsidencias(datos,  condicion){
             setAlertaCoincidencia(true)
         } else {
             setAlertaCoincidencia(false)
+        }
+
+        if (coincidenciasFiltradas.length===1 && coincidenciasFiltradas[0][condicion.name].length === condicion.value.length){
+            setAlertaCoincidencia(false);
         }
     },[condicion.value]);
 

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { contexto } from "../../../contexto/contexto";
 import Cargando from "../../../componentes/cargando/cargando";
 import Formulario from "../../../componentes/formulario/formulario";
@@ -7,46 +7,32 @@ import AlertaCoincidencias from "../../../componentes/alertas/alertaCoincidencia
 import ImgCargar from "./cargarImagen/ImgCargar";
 import useLibroForm from "../../../hooks/libro/cargar/useLibroForm";
 
-function LibroCargar({setAlerta}) {
+function LibroCargar() {
   const { datos } = useContext(contexto);
   const [img, setImg] = useState(datos.libroAEditar?.img || '');
-  const [ condicion, setCondicion] = useState(false);
   const { 
-    handleForm, onchange, onChangeMateria,
+    cargarLibro, onchange, onChangeMateria,
     errorPost, loading, response, 
-    errorPut, loadingPut, responsePut, 
     info:libro, errorFrom, claseError,
-    coincidencias, alertaCoincidencia, handleSelecNombre,handleSelecMateria, 
-    alerta
+    coincidencias, alertaCoincidencia, handleSelecNombre,handleSelecMateria,
   } = useLibroForm(img);
 
-  useEffect(()=>{
-    if (loading || loadingPut) {
-      setCondicion(true);
-    }
-
-    if (!loading && !loadingPut && condicion) {
-      setAlerta(alerta);
-    }
-  }, [alerta])
-
-
-  if (loading || loadingPut) return (
-    <Cargando text={loading ? 'Se esta creando el libro ...' : 'Se esta actualizando el libro ...'} />
-  );
-
-  if (errorPost || errorPut) return (
-    <Cargando text={errorPost ? errorPost : errorPut} />
+  if (loading || errorPost || response) return (
+    <>
+        {
+          loading 
+            ? (<h6>{datos.libroAEditar ? `Editando libro ...` : `Creando libro ...`}</h6>) 
+            : errorPost 
+              ? (<h6>{datos.libroAEditar ? `Error al editar el libro: ${errorPost}` : `Error al crear libro: ${errorPost}`}</h6>) 
+              : <h6>{datos.libroAEditar ? `Libro editado con exito` : `Libro creado con exito`}</h6>
+        }
+              </>
+     
   )
-
-  if (response || responsePut) return (
-    <Cargando text={response ? 'El libro se creó con exito' : 'El libro se actualizó con exito'} />
-  )
-
 
   return (
     <Formulario
-      handleForm={()=>handleForm()}
+      handleForm={()=>cargarLibro()}
       subtitulo={datos.libroAEditar ? 'Editar libro' : 'Agregar libro'}
       textBtn={'Confirmar'}
       error={errorFrom.error}

@@ -10,32 +10,41 @@ export const validarPedido = (pc) => {
     errorLocal.email=errorCliente.email;
     errorLocal.error=errorCliente.error;
 
+    console.log('pc', pc)
+
     if (!pc.pedido.fechaEntrega) {
       errorLocal.fechaEntrega = 'El pedido debe tener fecha de entrega';
       errorLocal.error='Tiene errores en la solicitud';
+      console.log('error aqui: 1')
     }
     if (!pc.pedido.importeTotal || !isFiniteNumber(Number(pc.pedido.importeTotal))) {
       errorLocal.importeTotal='El pedido debe tener importe total válido (en números)';
         errorLocal.error='Tiene errores en la solicitud';
+        console.log('error aqui: 2')
     }
     if (!pc.pedido.sena || !isFiniteNumber(Number(pc.pedido.sena))) {
       errorLocal.sena= 'El pedido debe tener una seña válida (en números)';
         errorLocal.error='Tiene errores en la solicitud';
+        console.log('error aqui: 3')
     }
     if (Number(pc.pedido.sena) > Number(pc.pedido.importeTotal)) {
       errorLocal.sena= 'La seña no puede ser mayor que el importe total';
         errorLocal.error='Tiene errores en la solicitud';
+        console.log('error aqui: 4')
     }
     if (!pc.pedido.archivos || !isFiniteNumber(Number(pc.pedido.archivos))) {
       errorLocal.archivos= 'El pedido debe tener la cantidad de archivos (en números)';
         errorLocal.error='Tiene errores en la solicitud';
+        console.log('error aqui: 5' ,pc.pedido.archivos)
     }
     if (!pc.pedido.anillados || !isFiniteNumber(Number(pc.pedido.anillados))) {
       errorLocal.anillados= 'El pedido debe tener la cantidad de anillados (en números)';
         errorLocal.error='Tiene errores en la solicitud';
+        console.log('error aqui: 6', pc.pedido.anillados)
     }
     if (pc.librosPedido.length <= 0) {
       errorLocal.error = 'El pedido debe tener al menos un libro';
+      console.log('error aqui: 7')
     }
     return errorLocal;
   };

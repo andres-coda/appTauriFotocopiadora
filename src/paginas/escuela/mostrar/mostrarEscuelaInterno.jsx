@@ -8,10 +8,11 @@ import MostrarCurso from "./mostrarCurso";
 import AlertaFormulario from "../../../componentes/alertas/alertaFormulario/alertaFormulario";
 import CargarEscuela from "../cargar/cargarEscuela";
 import CargarCurso from "../cargar/cargarCurso";
+import Modal from "../../../componentes/modal/modal";
+import { useModalContext } from "../../../contexto/modalContexto";
 
-function MostrarEscuelaInterno({ esc }) {
-  const [isAlerta, setIsAlerta] = useState(false);
-  const [escAEditar, setEscAEditar] = useState(null);
+function MostrarEscuelaInterno({ esc, setEscAEditar }) {
+  const {setEstadoModal} = useModalContext()
   const [btnMas, setBtnMas] = useState('Ver más');
   const [mostrarBoton, setMostrarBoton] = useState(false);
   const [clase, setClase] = useState('esc-desactivo');
@@ -46,7 +47,7 @@ function MostrarEscuelaInterno({ esc }) {
     <>
       <div className={`lista-escuelas ${clase}`} ref={descrRef}>
         <BotonEditar 
-          onClick={() => { setIsAlerta(true), setEscAEditar(esc) }}
+          onClick={() =>setEscAEditar(esc)}
           titulo={'Editar escuela'}
         />
         <h5>{esc.nombre}</h5>
@@ -56,19 +57,9 @@ function MostrarEscuelaInterno({ esc }) {
         {esc.cursos?.map((curso, ind) => (
           <MostrarCurso key={`curso-${ind}`} curso={curso} handleCurso={handleCurso} eliminar={true}/>
         ))}
-        <AlertaFormulario
-          isAlerta={isAlerta}
-          setIsAlerta={setIsAlerta}
-          children={<CargarEscuela setAlerta={setIsAlerta} escAEditar={escAEditar} />}
-        />
-        <AlertaFormulario
-          isAlerta={agregarCurso}
-          setIsAlerta={setAgregarCurso}
-          children={
-            <CargarCurso escuela={esc} setAgregarCurso={setAgregarCurso}/>
-          }
-        />
-        <button className='verMas' onClick={() => { setAgregarCurso(true),setEscAEditar(esc)}}>Agregar curso</button>
+
+        <Modal children={ <CargarCurso escuela={esc} /> } modal={agregarCurso} setModal={setAgregarCurso}/>
+        <button className='verMas' onClick={() => { setEstadoModal(true), setAgregarCurso(true)}}>Agregar curso</button>
       </div>
       {mostrarBoton && <button onClick={handleMore} className='verMas'>{btnMas}</button>}
     </>

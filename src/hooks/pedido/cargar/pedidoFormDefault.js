@@ -20,9 +20,7 @@ export const pedidoLibroInicialLibro = {
 
 export const pedidoLibroInicial = {
   cantidad: 1,
-  especificaciones: [],
   extras: "",
-  libro: pedidoLibroInicialLibro
 }
 
 export const pedidoParcialInicial = {
@@ -34,11 +32,11 @@ export const pedidoParcialInicial = {
 }
 
 export const pedidoInicial = {
-  pedido: pedidoParcialInicial,
+  pedido: {...pedidoParcialInicial},
   librosPedido: [],
-  especificaciones:[],
-  cliente: clienteInicial,
-  pedidoLibro: pedidoLibroInicial,
-  error: errorPedidoInicial,
-  libro: pedidoLibroInicialLibro
+  especificaciones: [],
+  cliente: {...clienteInicial},
+  pedidoLibro: {...pedidoLibroInicial},
+  error: {...errorPedidoInicial},
+  libro: {...pedidoLibroInicialLibro}
 }

@@ -1,6 +1,11 @@
+import { pedidoInicial } from "./default/inicialesDefault";
 import { libroPedidoAdapterPedido } from "./libroPedidoAdapterPedido.adapter";
 
 export const pedidoAdapter = (pedido) => {
+    if (!pedido) {
+        const newPedido = {...pedidoInicial}
+        return newPedido;
+    }
     const librosPedidos = pedido.librosPedidos?.map(lp => libroPedidoAdapterPedido(lp));
     const cliente = pedido.cliente 
     ? { 

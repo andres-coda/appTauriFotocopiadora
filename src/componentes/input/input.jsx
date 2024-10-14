@@ -1,5 +1,5 @@
 import './input.css'
-function Inputs({name, texto, tipo, handleOnChange, valor, clase, error}){
+function Inputs({name, texto, tipo, handleOnChange, valor, clase, error, autocomplete, requerido}){
     return(
         <div className='inputs-span'>
         <div className="inputs-entero">
@@ -11,6 +11,8 @@ function Inputs({name, texto, tipo, handleOnChange, valor, clase, error}){
                 onChange={handleOnChange}
                 value={valor}
                 className={clase?clase:''}
+                autoComplete={autocomplete ? 'on' : 'off'}
+                required={requerido ? true : false}
             />
             <label htmlFor={name}>{texto}</label>
         </div>

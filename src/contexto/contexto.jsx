@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { leerClientes } from "../servicios/cliente.servicie";
 import { leerEspecificaciones, leerEstados } from "../servicios/estado.service";
 import { leerLibros } from "../servicios/libro.service";
@@ -9,11 +9,18 @@ import { URL_BASE } from "../endPoint/endpoint";
 import { io } from "socket.io-client";
 import { pedidoInicial } from "../hooks/pedido/cargar/pedidoFormDefault";
 
+const pedidoInicilLocal = [{...pedidoInicial}]
+
 export const contexto = createContext({});
 
 export const ProveiderContext = ({ children }) => {
   const socket = useMemo(()=> io(URL_BASE), []);
-  const [pedidos, setPedidos] = useState([{...pedidoInicial}]);
+  const [pedidos, setPedidos] = useState([...pedidoInicilLocal] || []);
+  const [filtros, setFiltros] = useState({
+    funcionLibro: ()=> (elemento) => true ,
+    funcionPedido: ()=> (elemento) => true ,
+    filtro: [{tipo:'', filtro:''}],
+  })
   const [currentPedidoIndex, setCurrentPedidoIndex] = useState(0);
   const [userLogin, setUserLogin] = useState(JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : {email:''});
   const [error, setError] = useState('');
@@ -231,20 +238,31 @@ export const ProveiderContext = ({ children }) => {
   }, [datos.clientes, datos.clienteActual]);
 
   useEffect(()=>{
+    console.log('Pedido inicial local',pedidoInicilLocal);    
     setUserLogin(JSON.parse(localStorage.getItem('user')));
     leerClientes(setDatos, setError);
     leerEstados(setDatos, setError);
     leerEspecificaciones(setDatos, setError);
-    leerLibros(setDatos, setError);
     leerEscuelas(setDatos, setError);
     leerMaterias(setDatos, setError);
+    leerLibros(setDatos, setError);
     leerPrecios(setDatos, setError);
     leerCursos(setDatos,setError);
   },[]);
 
   return (
-    <contexto.Provider value={{ datos, setDatos, pedidos, setPedidos, currentPedidoIndex, setCurrentPedidoIndex, userLogin, setUserLogin }} >
+    <contexto.Provider value={{ datos, setDatos, pedidos, setPedidos, currentPedidoIndex, setCurrentPedidoIndex, userLogin, setUserLogin, filtros, setFiltros }} >
       {children}
     </contexto.Provider>
   )
+}
+
+
+export const useGlobalContext = () => {
+  const contextoGlobal = useContext(contexto);
+  if (!contextoGlobal) {
+      return new Error ('El contexto globalContexto no existe');
+  }
+
+  return contextoGlobal;
 }

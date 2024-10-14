@@ -1,18 +1,26 @@
 import './mostrarPrecios.css';
 import LeftArrow from '../../assets/arrowLeft.svg'
 import Nuevo from  '../../assets/add.svg';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { contexto } from '../../contexto/contexto';
 import MiniNav from '../../componentes/miniHeder/miniNav.jsx';
-import AlertaFormulario from '../../componentes/alertas/alertaFormulario/alertaFormulario.jsx';
 import CargarPrecio from './cargarPrecio.jsx';
 import EditarPrecio from './precioEditar.jsx'
+import Modal from '../../componentes/modal/modal.jsx';
+import { useModalContext } from '../../contexto/modalContexto.jsx';
 
 function MostrarPrecios() {
   const { datos } = useContext(contexto);
-  const [isAlerta, setIsAlerta] = useState(false);
   const navigate = useNavigate();
+  const {estadoModal, setEstadoModal} = useModalContext();
+  const [cargarPrecio, setCargarPrecio] = useState(false)
+  
+  useEffect(()=>{
+    if (!estadoModal){
+      setCargarPrecio(false);
+    }
+  },[estadoModal])
 
   return (
     <>
@@ -24,7 +32,7 @@ function MostrarPrecios() {
               className='btn-add'
             ><img src={LeftArrow} alt='Atras' /></li>
             <li 
-              onClick={()=>setIsAlerta(true)}
+              onClick={()=>{setCargarPrecio(true), setEstadoModal(true)}}
               title='Nuevo precio'
               className='btn-add'
             ><img src={Nuevo} alt='Nuevo precio' /></li>
@@ -35,13 +43,7 @@ function MostrarPrecios() {
       {datos.precios?.map((precio, index) => (
         <EditarPrecio key={`precios-${index}`} precio={precio} />
       ))}
-      <AlertaFormulario 
-        isAlerta={isAlerta}
-        setIsAlerta={setIsAlerta}
-        children={
-          <CargarPrecio />
-        }
-      />
+      {cargarPrecio? <Modal children={<CargarPrecio />} />:null}
     </>
   )
 }

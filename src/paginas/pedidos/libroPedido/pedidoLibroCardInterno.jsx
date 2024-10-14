@@ -6,7 +6,7 @@ import AlertaFormulario from '../../../componentes/alertas/alertaFormulario/aler
 import CambiarEstado from '../estado/cambiarEstado';
 import EspecificacionesCard from '../especificaciones/especificacionesCard';
 
-function PedidoLibroCardInterno({estadoClas, pedidoLibro, quitarLibro, libroCargando}){
+function PedidoLibroCardInterno({estadoClas, pedidoLibro, quitarLibro, libroCargando, especificaciones}){
   const [ modifEstado, setModifEstado ] = useState(false);
   const { datos } = useContext(contexto); 
 
@@ -18,22 +18,17 @@ const handleLibroSelec = () => {
   }
 }
 
-useEffect(()=>{
-  console.log(pedidoLibro.especificaciones,pedidoLibro.libro, pedidoLibro.cantidad, datos.precios);
-  
-},[])
-
     return(
       <>
         <div className={`libro-pedido-card  ${estadoClas}`} onClick={()=> handleLibroSelec()}>
         <h4>{pedidoLibro.cantidad}</h4>
         <div className={`libro-pedido-card-centro`}>          
-          <h5>{libroCargando?.nombre || pedidoLibro.libro.nombre}</h5>
+          <h5>{estadoClas==='cargando' ? libroCargando.nombre : pedidoLibro.libro.nombre}</h5>
           <p>{pedidoLibro.extras}</p>
           {estadoClas === 'proceso' ? <p>Precio sugerido: ${estimarPrecio(pedidoLibro.especificaciones,pedidoLibro.libro, pedidoLibro.cantidad, datos.precios)}</p>: null}
           {pedidoLibro.estadoPedido? <p>{pedidoLibro.estadoPedido.estado}</p> : null}
         </div>
-        <EspecificacionesCard listaEspecificaciones={pedidoLibro.especificaciones} />
+        <EspecificacionesCard listaEspecificaciones={especificaciones || pedidoLibro.especificaciones} />
       </div>
       <AlertaFormulario
         isAlerta={modifEstado}

@@ -2,11 +2,35 @@ import { useContext, useEffect, useState } from "react";
 import Formulario from "../../../componentes/formulario/formulario";
 import Inputs from "../../../componentes/input/input";
 import { userLogin } from "../../../servicios/usuarios.service";
-import { contexto } from "../../../contexto/contexto";
+import { contexto, useGlobalContext } from "../../../contexto/contexto";
 import Cargando from "../../../componentes/cargando/cargando";
+import useApi from "../../../servicios/Api/useApi";
+import useFormGeneral from "../../../hooks/form/useFormGeneral";
+
+
+const errorInicialLogin = {
+  error: 'Todos los campos deben completarse',
+  email: '',
+  password: ''
+}
+
+const loginInicial = {
+  email: "",
+  password: ""
+}
+
+function useLogin() {
+  const loginInicialLocal = {...loginInicial}
+  const errorInicialLocal = {...errorInicialLogin}
+  const { setUserLogin } = useGlobalContext(contexto);
+  const {onchange, } =useFormGeneral(loginInicialLocal, errorInicialLocal)
+  const [usuario, setUsuario] = useState(loginInicialLocal);
+
+}
 
 function Login({validarErrores}) {
-  const { setUserLogin } = useContext(contexto);
+  const { setUserLogin } = useGlobalContext(contexto);
+  const {} =useApi()
   const [clasError, setClasError] = useState('sugerencia-error');
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState({
@@ -71,6 +95,8 @@ function Login({validarErrores}) {
               handleOnChange={(e) => handleChange(e)}
               valor={usuario.email}
               error={error.email}
+              autocomplete={true}
+              requerido={true}
             />
             <Inputs
               name={'password'}
@@ -79,6 +105,7 @@ function Login({validarErrores}) {
               handleOnChange={(e) => handleChange(e)}
               valor={usuario.password}
               error={error.password}
+              requerido={true}
             />
 
 

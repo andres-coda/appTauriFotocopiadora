@@ -1,5 +1,5 @@
 import Calendario  from '../../../../assets/calendario.svg';
-import { formatoFecha } from '../../../../funciones/utilidades.function.js';
+import { formatoFecha, formatoHora } from '../../../../funciones/utilidades.function.js';
 import './pedidoFecha.css'
 
 function PedidoFecha({pedido}) {
@@ -7,7 +7,7 @@ function PedidoFecha({pedido}) {
     <div className="pedido-fecha-container">
       <img src={Calendario} alt='Fecha' />
       <div className='pedido-fecha-container'>
-        <div className='pedido-fecha-interno'>
+        <div className='pedido-fecha-interno'  title={`Tomado a las ${formatoHora(pedido.fechaTomado)}`}>
           <h6>Tomado </h6>
           <h5>{formatoFecha(pedido.fechaTomado)}</h5>
         </div>

@@ -12,26 +12,45 @@ import EspecificacionesCard from "../especificaciones/especificacionesCard";
 import CambiarEstado from "../estado/cambiarEstado";
 import { rutasGenerales } from "../../../rutas/rutas";
 import '../../../componentes/pedidos/card/pedidoCard.css'
+import Modal from "../../../componentes/modal/modal";
+import { useModalContext } from "../../../contexto/modalContexto";
+import useApi from "../../../servicios/Api/useApi";
+import { URL_PEDIDOS } from "../../../endPoint/endpoint";
+import { pedidoAdapter } from "../../../adaptadores/pedido.adapter";
 
 function PedidoMostrarCard({ libro }) {
   const { setDatos } = useContext(contexto);
-  const [modifEstado, setModifEstado] = useState(false);
+  const { estadoModal, setEstadoModal } = useModalContext()
   const [estadoClas, setEstadoClas] = useState(`pendiente`);
   const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const [irCambiarEstado, setIrCambiarEstado] = useState(false);
+  const [irAPedido, setIrAPedido] = useState(false);
+
+  const { response, fetchData, errorFetch, loading } = useApi(URL_PEDIDOS + '/' + libro.pedido.idPedido, pedidoAdapter)
 
   useEffect(() => {
     caseClaseEstado(setEstadoClas, libro.estadoPedido.idEstadoPedido)
   }, [libro.estadoPedido.idEstadoPedido]);
 
-  const handleClickCard = async () => {
-    leerPedido(libro.pedido, setDatos, setError);
-    navigate(rutasGenerales.PEDIDOINDIVIDUAL)
+  const handleClickCard = async (e) => {
+    e.stopPropagation()
+    setIrAPedido(true);
+    fetchData();
   }
+
+  useEffect(() => {
+    if (response) {
+      setDatos((prev) => ({ ...prev, pedidoActual: response }));
+      navigate(rutasGenerales.PEDIDOINDIVIDUAL)
+    }
+    if (response || loading || errorFetch || !estadoModal) {
+      setIrCambiarEstado(false);
+    }
+  }, [response, loading, errorFetch, estadoModal]);
 
   return (
     <>
-      <div className='cliente-pedidos' title={libro.estadoPedido.estado} onClick={handleClickCard}>
+      <div className='cliente-pedidos' title={libro.estadoPedido.estado} onClick={(e) => handleClickCard(e)}>
         <div className={`cliente-pedidos-interno ${estadoClas}`}>
           <PedidoFecha pedido={libro.pedido} />
         </div>
@@ -49,22 +68,33 @@ function PedidoMostrarCard({ libro }) {
           <ClienteNombre nombre={libro.pedido.cliente.nombre ? libro.pedido.cliente.nombre : libro.pedido.cliente.celular} />
           <BotonEditar
             titulo={'Editar estado'}
-            onClick={(e) => { e.stopPropagation(), setModifEstado(true) }}
+            onClick={(e) => { e.stopPropagation(), setEstadoModal(true), setIrCambiarEstado(true), setIrAPedido(false) }}
             clase={'inferior'}
           />
         </div>
       </div>
-      <AlertaFormulario
-        isAlerta={modifEstado}
-        setIsAlerta={setModifEstado}
-        children={
+      {irCambiarEstado ? (
+        <Modal children={
           <CambiarEstado
             estadoClase={estadoClas}
             libroPedido={libro}
-            setModifEstado={setModifEstado}
           />
-        }
-      />
+        } />
+      ) : null}
+      {irAPedido ? (
+        <Modal
+          children={
+            <>
+              {
+                loading
+                  ? (<h6>Cargando pedido ...</h6>)
+                  : errorFetch
+                    ? (<h6>{`Error al cargar pedido: ${errorFetch}`}</h6>)
+                    : <h6>Pedido cargado con exito, redirigiendo ...</h6>
+              }
+            </>
+          } />
+      ) : (null)}
     </>
   )
 }

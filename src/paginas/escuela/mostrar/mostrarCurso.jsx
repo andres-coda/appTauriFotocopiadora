@@ -1,29 +1,30 @@
-
-import Cargando from '../../../componentes/cargando/cargando';
-import { quitarProfeMateriaCurso } from '../../../servicios/curso.service';
 import MostrarCursoInterno from './mostrarCursoInterno';
 import './mostrarEscuela.css'
-import { useContext, useState } from 'react'
 import MostrarProfMat from './mostrarProfMat';
-import { contexto } from '../../../contexto/contexto';
+import useCargarCurso from '../../../hooks/cursos/useCargarCurso';
 
 function MostrarCurso({ curso, handleCurso, eliminar }) {
-  const { setDatos } = useContext(contexto);
-  const [cargando, setCargando] = useState(false);
-  const [error, setError] = useState('')
+  const {
+    responseApi, loadingApi, errorFetchApi, quitarCurso,
+  } = useCargarCurso()
 
   const handleEliminarProfeMateria = async (profeMateria) => {
-    setCargando(true);
-    const newCurso = await quitarProfeMateriaCurso(curso.idCurso, profeMateria, setError)
-    if (newCurso) {
-      setCargando(false)
-    }
+    quitarCurso(curso.idCurso, profeMateria);
   }
-
+  
   if (!curso) return null;
 
-  if (cargando) return (
-    <Cargando />
+  if (loadingApi || errorFetchApi || responseApi) return (
+    <>
+        {
+          loadingApi 
+            ? (<h6>{`Quitando curso ...`}</h6>) 
+            : errorFetchApi 
+              ? (<h6>{`Error al quitar el curso: ${errorFetchApi}`}</h6>) 
+              : <h6>{`Curso quitado con exito`}</h6>
+        }
+              </>
+     
   )
 
   return (

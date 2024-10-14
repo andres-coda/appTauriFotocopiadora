@@ -7,100 +7,68 @@ import Filtrar from '../../../assets/filter.svg'
 import Ordenar from '../../../assets/orden.svg'
 import ListaFiltros from '../../../componentes/filtros/listaFiltros';
 import PedidoMostrarCard from '../card/pedidoMostrarCard';
-import AlertaFormulario from '../../../componentes/alertas/alertaFormulario/alertaFormulario';
 import FiltroPedidos from '../filtros/filtroPedidos';
+import useFiltro from '../../../hooks/filtros/useFiltro';
+import Modal from '../../../componentes/modal/modal';
+import { useModalContext } from '../../../contexto/modalContexto';
 import FiltroOrdenarPedido from '../filtros/filtroOrdenarPedido';
 
 function ListaPedidosMostrar() {
+  const { filtros, recetearFiltros } = useFiltro();
+  const { setEstadoModal } = useModalContext()
   const { datos } = useContext(contexto);
-  const [funcionFiltro, setFuncionFiltron] = useState(()=>(libro)=>true);
-  const [filtros, setFiltros] = useState([]);
-  const [alertaFiltro, setAlertaFiltro] = useState(false);
-  const [alertaOrden, setAlertaOrden] = useState(false);
-  const [filtroOrdenar, setFiltroOrdenar] = useState([]);
-
-  const handleFiltroSelect = () => {
-    setFiltros([]);
-    setFiltroOrdenar([]);
-  };
-
-const handleFiltrosMostrar=()=>{
-  setAlertaFiltro(true)
-}
-
-const handleFiltrosOrdenar=()=>{
-  setAlertaOrden(true)
-}
+  const [tipoFiltro, setTipoFiltro] = useState(false)
 
   return (
     <>
       <MiniNav
         children={
-          <> 
-            <li 
-              className='btn-add' 
+          <>
+            <li
+              className='btn-add'
               title='Recetear busqueda'
-              onClick={handleFiltroSelect}
+              onClick={recetearFiltros}
             ><img src={Reciclar} alt='Recetear busqueda' /></li>
-            <li 
-              className='btn-add' title='Filtrar pedidos' 
-              onClick={handleFiltrosMostrar}
+            <li
+              className='btn-add' title='Filtrar pedidos'
+              onClick={() => { setTipoFiltro(false), setEstadoModal(true) }}
             ><img src={Filtrar} alt='Filtrar pedidos' /></li>
-            <li 
-              className='btn-add' 
-              title='Ordenar pedidos' 
-              onClick={handleFiltrosOrdenar}
+            <li
+              className='btn-add'
+              title='Ordenar pedidos'
+              onClick={() => { setTipoFiltro(true), setEstadoModal(true) }}
             ><img src={Ordenar} alt='Ordenar pedidos' /></li>
           </>
         }
       />
       <h2 className='titulos'>Lista de pedidos</h2>
-      <ListaFiltros lista={filtros} />
-      <ListaFiltros lista={filtroOrdenar} ordenar={true} />
-      <div className='pedido-conteiner'>
-      {
-        datos.listaPedidoLibros 
-        ? (
-          datos.listaPedidoLibros.pedidoLibros?.length<=0 
-          ? (<p>Estoy en pedidoLibros vacío</p>)
-          : (
+      <ListaFiltros lista={filtros.filtro} tipo={'pedido'}/>
+      <ListaFiltros lista={filtros.filtro.filter(fl => fl.tipo === 'orden')} />
+      {!datos.listaPedidoLibros || datos.listaPedidoLibros.pedidoLibros?.length <= 0 ? (
+        <p>
+          {`No hay pedidos ${filtros && filtros.length > 0
+              ? filtros.map(filtro =>
+                filtro.filtro.nombre ? filtro.filtro.nombre : filtro.filtro.estado
+              ).join(', ')
+              : 'sin filtros aplicados'
+            }. Aplicar nuevos filtros ...`}
+        </p>
+      ) : (
+        <div className='pedido-conteiner'>          
+          {
             datos.listaPedidoLibros.pedidoLibros
-              .filter(funcionFiltro)
-              .map((libro, index)=>(
+              .filter(filtros.funcionPedido)
+              .map((libro, index) => (
                 <PedidoMostrarCard
-                key={`libro-${index}`}
-                libro={libro}
+                  key={`libro-${index}`}
+                  libro={libro}
                 />
               ))
-          )
-        ) : ( <p>Aplicar filtros para que aparezcan los pedidos</p> ) 
-      }
-      </div>
-      <AlertaFormulario
-        isAlerta={alertaFiltro}
-        setIsAlerta={setAlertaFiltro}
-        children={
-          <FiltroPedidos 
-            setFuncion={setFuncionFiltron}
-            setFiltros={setFiltros}
-            filtros={filtros}
-            setAlertaFiltro={setAlertaFiltro}
-          />
+          }
+        </div>
+      )}
 
-        }
-      />
-      <AlertaFormulario
-        isAlerta={alertaOrden}
-        setIsAlerta={setAlertaOrden}
-        children={
-          <FiltroOrdenarPedido 
-            setAlerta={setAlertaOrden}
-            filtros={filtroOrdenar}
-            setFiltros={setFiltroOrdenar}
-          />
-        }
-      />
-
+      <Modal children={!tipoFiltro ? <FiltroPedidos /> : <FiltroOrdenarPedido />} />
     </>
   )
 }

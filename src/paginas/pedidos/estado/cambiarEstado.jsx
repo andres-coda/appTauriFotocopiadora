@@ -1,49 +1,26 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import './cambiarEstado.css'
 import { contexto } from "../../../contexto/contexto";
-import { URL_GEST_ESTADO_PEDIDO } from "../../../endPoint/endpoint.ts";
-import { cambiarEstadoLibroPedido } from "../../../servicios/pedido.service.js";
-import Cargando from "../../../componentes/cargando/cargando.jsx";
+import useCambiarEstado from "../../../hooks/pedido/estado/useCambiarEstado.js";
 
 
-function CambiarEstado({estadoClase, libroPedido, setModifEstado}) {
+function CambiarEstado({estadoClase, libroPedido}) {
   const { datos } = useContext(contexto);
-  const [cargando, setCargando] = useState(false);
-  const [textoCargando, setTextoCargando] = useState('Efectuando cambio de estado')
+  const {response, errorFetch, loading, handleCambiarEstado} = useCambiarEstado(libroPedido);
 
-  const handleCambiarEstado = async (estado) => {    
-    setCargando(true);
-    const idsEspecificaciones = libroPedido.especificaciones.map(e => e.idEspecificaciones);
-    const libroAEnviar = {
-      cantidad: libroPedido.cantidad,
-      extras: libroPedido.extras,
-      idLibroPedido: libroPedido.idLibroPedido,
-      libro: {
-        idLibro: libroPedido.libro.idLibro,
-      },
-      pedido: {
-        idPedido: libroPedido.pedido ? libroPedido.pedido.idPedido : datos.pedidoActual.idPedido,
-        cliente: {
-          idPersona: libroPedido.pedido ? libroPedido.pedido.cliente.idPersona : datos.pedidoActual.cliente.idPersona,
+  if (loading || errorFetch || response) return (
+    <>
+        {
+          loading 
+            ? (<h6>Cambiando estado del pedido ...</h6>) 
+            : errorFetch 
+              ? (<h6>{`Error al cambiar el estdao del pedido: ${errorFetch}`}</h6>) 
+              : <h6>Pedido cambiado con exito</h6>
         }
-      },
-      especificaciones: idsEspecificaciones,
-      estadoPedido: libroPedido.estadoPedido,
-    }
-    const librosPedidos = [libroAEnviar];
-    const dtoPedido = { librosPedidos, estado };
-    const idPedido = libroPedido.pedido ? libroPedido.pedido.idPedido: datos.pedidoActual.idPedido;
-    const endpoint = `${URL_GEST_ESTADO_PEDIDO}/${idPedido}`;
-    const newPedido = await cambiarEstadoLibroPedido(endpoint,dtoPedido, setTextoCargando);
+              </>
+  );
+  
 
-    if (newPedido) {
-      setCargando(false);
-      setModifEstado(false);
-    }
-  }
-  if (cargando) return (
-    <Cargando children={<p>{textoCargando}</p>} />
-  )
   return (
     <div className="estados-modif">
       <>

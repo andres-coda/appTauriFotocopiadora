@@ -1,159 +1,77 @@
-import { useContext, useState } from "react";
-import { contexto } from "../../../contexto/contexto";
-import Cargando from "../../../componentes/cargando/cargando";
 import Formulario from "../../../componentes/formulario/formulario";
 import Inputs from "../../../componentes/input/input";
 import ClienteCargarInterno from "../../cliente/cargar/clienteCargarInterno";
 import AlertaCoincidencias from "../../../componentes/alertas/alertaCoincidencias/alertaCoincidencias";
-import { crearCurso } from "../../../servicios/curso.service";
-import { obtenerAnioActual } from "../../../funciones/utilidades.function";
+import useCargarCurso from "../../../hooks/cursos/useCargarCurso";
 
-const profesorInicial = {
-  nombre:'',
-  celular: '',
-  email:''
-};
+function CargarCurso({cursoAEditar, escuela }) {
+  const {
+    onChangeMateria, handleSelecMateria, coincidenciasMateria, isAlertaMateria,
+    profesor, onChangeProfesor, coinPersona, alertaCoinPersona, handleSelecPersona,
+    curso, onChangeCurso, errorFrom, agregarCurso,
+    errorFetch, loading, response, 
+  } = useCargarCurso(cursoAEditar);
 
-const errorInicial = {
-  anio: '',
-  grado: '',
-  profesor: '',
-  materia: '',
-  error: ''
-}
-
-function CargarCurso({cursoAEditar, escuela, setAgregarCurso}) {
-  const { datos } = useContext(contexto);
-  const [cargando, setCargando] = useState(false);
-  const [ claseError, setClaseError ] = useState('sugerencia-error');
-  const [isAlerta, setIsAlerta] = useState({materia:false});
-  const [ coincidencias, setCoincidencias ] = useState({materia:[]});
-  const [profesor, setProfesor]=useState(profesorInicial);
-  const [materia, setMateria]=useState(null);
-  const [error, setError] = useState({
-    ...errorInicial,
-    error: 'Debe completarse el grado',
-  });
-
-  const [curso, setCurso] = useState({
-    anio: cursoAEditar ? cursoAEditar.anio : obtenerAnioActual(),
-    grado: cursoAEditar ? cursoAEditar.grado :'',
-    profesor:'',
-    materia:''
-  });
-
-  const validarError=(curso) =>{
-    const newError = errorInicial;
-    if(!curso.grado) {
-      newError.grado = 'El curso debe tener grado';
-      newError.error = 'Tiene errores en la solicitud';
-    }
-    return newError
-  }
-  const handleSelectMateria = (materiaInterna) =>{
-    setCurso((prev)=>({...prev,materia:materiaInterna.nombre}));
-    setMateria(materiaInterna);
-    setCoincidencias((prev)=>({...prev,materia:[]}));
-  }
-
-  const handleOnChange = (e) => {
-    const { value, name } = e.target;
-    setCurso((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-    let coincidenciaFiltradas=[];
-    if (value.length > 1) {
-      if (name==='materia') {
-        coincidenciaFiltradas = datos.materias?.filter(materia =>
-          materia.nombre.toLowerCase().includes(value.toLowerCase())
-        ) || [];
-        setCoincidencias(prev => ({ ...prev, materia: coincidenciaFiltradas }));
-      }
-      
-      if (coincidenciaFiltradas?.length > 0) {
-        setIsAlerta(prev => ({ ...prev, [name]: true }));
-      } else {
-        setIsAlerta(prev => ({ ...prev, [name]: false }));
-      }
-    } else {
-      setCoincidencias(prev => ({ ...prev, [name]: [] }));
-      setIsAlerta(prev => ({ ...prev, [name]: false }));
-    }
-  }
-
-  const handleForm = async (e) => {
-    const valError = validarError(curso);
-    if (valError.error) {
-      setError(valError);
-      setClaseError('')
-      return
-    }
-    setCargando(true);
-    const profeMateria ={ 
-      profesor: profesor, 
-      materia: materia? materia : { nombre: curso.materia }
-    }
-    const cursoCargar = { escuela:escuela, anio: curso.anio, grado: curso.grado }
-    const dto = {...profeMateria, curso:cursoCargar}
-
-    const newCurso = await crearCurso(dto, setError);
-    if (newCurso) {
-      setAgregarCurso(false);
-      setCargando(false);
-    }
-  }
-
-  if(cargando ) return (
-    <Cargando text={'Se esta procesando la solicitud'}/>
+  if (loading || errorFetch || response) return (
+    <>
+        {
+          loading 
+            ? (<h6>{cursoAEditar ? `Editando curso ...` : `Creando curso ...`}</h6>) 
+            : errorFetch 
+              ? (<h6>{cursoAEditar ? `Error al editar el curso: ${errorFetch}` : `Error al crear curso: ${errorFetch}`}</h6>) 
+              : <h6>{cursoAEditar ? `Curso editado con exito` : `Curso creado con exito`}</h6>
+        }
+              </>
+     
   )
   
   return (
     <Formulario
-      handleForm={(e) => handleForm(e)}
+      handleForm={() => agregarCurso(escuela)}
       textBtn={cursoAEditar ? 'Editar curso' : 'Cargar curso'}
       subtitulo={cursoAEditar ? 'Editar curso' : 'Cargar curso'}
-      error={error.error}
-      classError={claseError}
+      error={errorFrom.error}
       children={
         <>
           <Inputs
             name={'anio'}
             texto={'Año'}
             tipo={'text'}
-            error={error.anio}
-            handleOnChange={(e) => handleOnChange(e)}
+            error={errorFrom.anio}
+            handleOnChange={(e) => onChangeCurso(e)}
             valor={curso.anio}
           />
           <Inputs
             name={'grado'}
             texto={'Grado'}
             tipo={'text'}
-            error={error.grado}
-            handleOnChange={(e) => handleOnChange(e)}
+            error={errorFrom.grado}
+            handleOnChange={(e) => onChangeCurso(e)}
             valor={curso.grado}
           />
-          <h6>Datos del profesor</h6>
+          <h5>Datos del profesor</h5>
           <ClienteCargarInterno
                         persona={profesor}
-                        error={error.profesor}
-                        setPersona={(persona)=>setProfesor(persona)}
-
+                        error={errorFrom}
+                        coincidencias={coinPersona}
+                        alerta={alertaCoinPersona}
+                        handleSelec={handleSelecPersona}
+                        handleOnChange={onChangeProfesor}
                       />
           <Inputs
-            name={'materia'}
+            name={'materia.nombre'}
             texto={'Materia'}
             tipo={'materia'}
-            error={error.materia}
-            handleOnChange={(e) => handleOnChange(e)}
-            valor={curso.materia}
+            error={errorFrom.materia}
+            handleOnChange={(e)=>onChangeMateria(e)}
+            valor={curso.materia.nombre}
           />
           <AlertaCoincidencias
-          isAlerta={isAlerta.materia}
+          isAlerta={isAlertaMateria}
           children={
             <>
-              {coincidencias.materia.map((materia, index) => (
-                <li key={`nombre-${index}`} onClick={() => handleSelectMateria(materia)}>
+              {coincidenciasMateria.map((materia, index) => (
+                <li key={`materia-${index}`} onClick={() => handleSelecMateria(materia)}>
                   <h6>{materia.nombre}</h6>
                 </li>
               ))}

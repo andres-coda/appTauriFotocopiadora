@@ -8,19 +8,20 @@ import ListaFiltros from '../../../componentes/filtros/listaFiltros';
 import FiltroBuscarLibro from '../filtros/filtroBuscarLibro';
 import FiltrosLibros from '../filtros/filtrosLibros';
 import LibroMostrarInterno from './libroMostrarInterno';
-import AlertaFormulario from '../../../componentes/alertas/alertaFormulario/alertaFormulario';
 import LibroCargar from '../cargar/libroCargar';
+import Modal from '../../../componentes/modal/modal';
+import useFiltro from '../../../hooks/filtros/useFiltro';
+import { useModalContext } from '../../../contexto/modalContexto';
 
 function LibroMostrar() {
-  const [alerta, setAlerta ] = useState(false);
-  const [buscador, setBuscador] = useState(()=>(libro)=>libro.nombre.toLowerCase().includes(''))
-  const [filtros, setFiltros] = useState([]);
-  const [funcionFiltro, setFuncionFiltron] = useState(()=>(libro)=>true);
-  const [alertaFiltro, setAlertaFiltro] = useState(false)
+  const [buscador, setBuscador] = useState(()=>(libro)=>libro.nombre.toLowerCase().includes(''));
+  const [alertaFiltro, setAlertaFiltro] = useState(false);
 
-  const handleFiltrosMostrar=()=>{
-    setAlertaFiltro(true)
-  }
+  const {
+    recetearFiltros, filtros,
+  } = useFiltro();
+
+  const {setEstadoModal} = useModalContext()
 
   return (
     <>
@@ -29,8 +30,7 @@ function LibroMostrar() {
           <>
             <li onClick={() => {
                 setBuscador(()=>(libro)=>libro.nombre.toLowerCase().includes('')),
-                setFuncionFiltron(()=>(libro)=>true),
-                setFiltros([])
+                recetearFiltros()
             }}
               className='btn-add'
               title='Recetear filtros'
@@ -38,46 +38,28 @@ function LibroMostrar() {
             <li 
               className='btn-add' 
               title='Filtrar libro' 
-              onClick={handleFiltrosMostrar}
+              onClick={()=>{setAlertaFiltro(true), setEstadoModal(true) }}
               ><img src={Filtrar} alt='Filtrar libro' /></li>
             <li 
               className='btn-add' 
               title='Nuevo libro' 
-              onClick={() => setAlerta(true)}
+              onClick={() => {setAlertaFiltro(false), setEstadoModal(true)}}
               ><img src={Add} alt='Nuevo libro' /></li>
           </>
         }
       />
       <h2 className='titulos'>Lista de libros</h2>
-      <ListaFiltros lista={filtros} />
+      <ListaFiltros lista={filtros.filtro} tipo={'libro'}/>
       <FiltroBuscarLibro 
         setFuncionBuscar={setBuscador}
       />
       <div className='lista-libros'>
       <LibroMostrarInterno
-        filtros={funcionFiltro}
+        filtros={filtros.funcionLibro}
         buscador={buscador}
       />
-      <AlertaFormulario
-        isAlerta={alerta}
-        setIsAlerta={setAlerta}
-        children={
-          <LibroCargar setAlerta={setAlerta}/>
-        }
-      />
-      <AlertaFormulario 
-        isAlerta={alertaFiltro}
-        setIsAlerta={setAlertaFiltro}
-        children={
-          <FiltrosLibros 
-            setFuncion={setFuncionFiltron}
-            setFiltros={setFiltros}
-            filtros={filtros}
-            setAlertaFiltro={setAlertaFiltro}
-          />
-        }
-      />
       </div>
+      <Modal children={alertaFiltro ? <FiltrosLibros /> : <LibroCargar />}/>
   </>
   )
 }

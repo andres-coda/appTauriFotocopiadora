@@ -1,7 +1,9 @@
 import Botonera from "../../../componentesStilos/botonera/botonera";
 import BotonFormulario from "../../../componentesStilos/botones/botonFormulario";
+import { useModalContext } from "../../../contexto/modalContexto";
 
 function AlertaEliminar({ children, setEliminar, handleEliminar, error }) {
+  const {setEstadoModal} = useModalContext();
   return (
     <>
         {children}
@@ -9,7 +11,7 @@ function AlertaEliminar({ children, setEliminar, handleEliminar, error }) {
           children={
             <>
               <BotonFormulario
-                onClick={() => { setEliminar(false) }}
+                onClick={() => { setEstadoModal(false), setEliminar(false)? setEliminar(false) : null }}
                 textBtn={'Cancelar'}
               />
               <BotonFormulario

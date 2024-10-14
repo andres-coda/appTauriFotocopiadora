@@ -6,22 +6,22 @@ import { errorLibroInicial, libroInicial } from "./libroFormDefault";
 import useCoinsidencias from "../../coincidencias/useCoincidencias";
 import useFormGeneral from "../../form/useFormGeneral";
 import { validarLibro } from "../../../funciones/validaciónForm/validarLibro";
+import { useModalContext } from "../../../contexto/modalContexto";
 
 function useLibroForm(img) {
   const { datos } = useContext(contexto);
-  
+  const { estadoModal} = useModalContext();
+  const [condicion, setCondicion] = useState(false) 
+
   const url = datos.libroAEditar ? `${URL_LIBROS}/${datos.libroAEditar.idLibro}` : URL_LIBROS;
   const newLibroInicial = {...libroInicial, img:img}
   
   const {
-    handleForm, handleAtras, onchange,
+    handleForm, onchange,
     errorPost, loading, response, 
-    errorPut, loadingPut, responsePut, 
-    info, errorFrom, setInfo, claseError,
-    alerta, setAlerta,
-  } = useFormGeneral(validarLibro, url, newLibroInicial, datos.libroAEditar, errorLibroInicial, libroAdapterGeneral );
+    info, errorFrom, setInfo
+  } = useFormGeneral( newLibroInicial, errorLibroInicial, datos.libroAEditar);
   
-
   const { coincidencias: coincidenciasNombre, alertaCoincidencia: isAlertaNombre, setSeleccion: setSeleccionNombre } = useCoinsidencias(datos.libros, { name: 'nombre', value: info.nombre });
   const { coincidencias: coincidenciasMateria, alertaCoincidencia: isAlertaMateria, setSeleccion: setSeleccionMateria } = useCoinsidencias(datos.materias, { name: 'nombre', value: info.materia.nombre });
 
@@ -34,6 +34,19 @@ function useLibroForm(img) {
     nombre: isAlertaNombre,
     materia: isAlertaMateria
   });
+
+  useEffect(()=>{
+    if (response) {
+      setCondicion(true);
+    }
+  }, [response])
+
+  useEffect(()=>{
+    if (condicion) {
+      setCondicion(false);
+      setDatos((prev)=>({...prev, libroAEditar:null}));
+    }
+  }, [estadoModal]);
 
   const handleSelecNombre = (libro) => {
     setInfo(libro);
@@ -58,8 +71,7 @@ function useLibroForm(img) {
       nombre: isAlertaNombre,
       materia: isAlertaMateria
     }
-    console.log(alertaCoincidencia);
-    
+        
     setAlertaCoincidencia(newAlrta);
   },[isAlertaNombre, isAlertaMateria]);
 
@@ -81,16 +93,22 @@ function useLibroForm(img) {
         },
       });      
     }
-
   };
 
+  const cargarLibro = () => {
+    handleForm(url, info, true, validarLibro, libroAdapterGeneral);
+  }
+
+  const handleAtras = () => {
+    setDatos((prev)=>({...prev, libroAEditar:null}));
+    navigate(-1);
+  }
+
   return {
-    handleForm, handleAtras, onchange, onChangeMateria,
+    cargarLibro, handleAtras, onchange, onChangeMateria,
     errorPost, loading, response, 
-    errorPut, loadingPut, responsePut, 
-    info, errorFrom, claseError,
-    coincidencias, alertaCoincidencia, handleSelecNombre,handleSelecMateria,
-    alerta, setAlerta,
+    info, errorFrom,
+    coincidencias, alertaCoincidencia, handleSelecNombre,handleSelecMateria
   }
 
 }

@@ -7,17 +7,16 @@ import { contadorEstadoPedido } from '../../../funciones/utilidades.function';
 import Cel from '../../../assets/phone.svg';
 import Email from '../../../assets/email.svg'
 import { rutasGenerales } from '../../../rutas/rutas';
-import useGetApi from '../../../hooks/Api/useGetApi';
 import { clienteAdapter } from '../../../adaptadores/cliente.adapter';
 import { URL_CLIENTES } from '../../../endPoint/endpoint';
 import Cargando from '../../../componentes/cargando/cargando';
 import ParrafoClase from '../../../componentesStilos/parrafos/parrafoClase';
+import useApi from '../../../servicios/Api/useApi';
 
 function ClienteCardDatos({cliente}) {
 	const { setDatos } = useContext(contexto);
-	const [urlApi, setUrlApi] = useState('') 
 	const navigate = useNavigate();
-	const {loading, error, response} = useGetApi(urlApi, clienteAdapter);
+	const {loading, error, response, fetchData} = useApi(null, clienteAdapter);
 
 	useEffect(()=>{
 		if (response) {
@@ -27,7 +26,7 @@ function ClienteCardDatos({cliente}) {
 	},[response])
 
 	const handleCliente = () =>{
-		setUrlApi(`${URL_CLIENTES}/${cliente.idPersona}`)
+		fetchData(`${URL_CLIENTES}/${cliente.idPersona}`)
 	}
 
 	if (error) return (

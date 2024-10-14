@@ -9,26 +9,23 @@ import PedidoMostrarCard from '../card/pedidoMostrarCard';
 import Cargando from '../../../componentes/cargando/cargando';
 import AlertaFormulario from '../../../componentes/alertas/alertaFormulario/alertaFormulario';
 import FiltroOrdenarPedido from '../filtros/filtroOrdenarPedido';
+import Modal from '../../../componentes/modal/modal';
+import { useModalContext } from '../../../contexto/modalContexto';
 
 function PedidoMostrarEsp() {
   const { datos } = useContext(contexto);
   const navigate = useNavigate();
-  const [ alertaOrden, setAlertaOrden] = useState(false)
-  const [filtroOrden, setFiltroOrden] = useState([])
+  const {setEstadoModal}=useModalContext()
 
   const handleAtras = () => {
     navigate(-1);
   }
-
-  const handleFiltroOrdenar = () =>{
-    setAlertaOrden(true);
-  }
   
   useEffect(()=>{
-    if (datos.listaPedidoLibros.pedidoLibros?.length<=0){
+    if (!datos.listaPedidoLibros || !Array.isArray(datos.listaPedidoLibros.pedidoLibros) || datos.listaPedidoLibros.pedidoLibros.length <= 0){
       navigate(-1);
     }
-  },[]);
+  },[datos.listaPedidoLibros]);
 
   return (
     <>
@@ -42,7 +39,7 @@ function PedidoMostrarEsp() {
           ><img src={LeftArrow} alt="Atras" /></li>
           <li 
             title="Ordenar"
-            onClick={handleFiltroOrdenar}
+            onClick={()=>setEstadoModal(true)}
             className="btn-add"
           ><img src={Ordenar} alt="Ordenar" /></li>
           </>
@@ -59,23 +56,21 @@ function PedidoMostrarEsp() {
               ))}
             </ul>
           </div>
+          <div className='pedido-conteiner'>
+
           {datos.listaPedidoLibros.pedidoLibros.map((libro, index) => (
             <PedidoMostrarCard
-              key={`libro-${index}`} 
-              libro={libro}
+            key={`libro-${index}`} 
+            libro={libro}
             />
           ))}
+          </div>
+
         </>) : (<Cargando />)}
 
-        <AlertaFormulario 
-          isAlerta={alertaOrden}
-          setIsAlerta={setAlertaOrden}
+        <Modal 
           children={
-            <FiltroOrdenarPedido 
-              setAlerta={setAlertaOrden}
-              filtros={filtroOrden}
-              setFiltros={setAlertaOrden}
-            />
+            <FiltroOrdenarPedido />
           }        
         />
     </>

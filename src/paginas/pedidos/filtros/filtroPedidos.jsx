@@ -1,90 +1,23 @@
-import { useContext, useEffect, useState } from "react";
 import FiltroEstilo from "../../../componentesStilos/filtro/filtroEstilo.jsx";
-import { filtrarPedidos } from "../../../servicios/pedido.service.js";
-import { contexto } from "../../../contexto/contexto.jsx";
+import { useGlobalContext } from "../../../contexto/contexto.jsx";
 import BotonFormulario from "../../../componentesStilos/botones/botonFormulario.jsx";
+import useFiltro from "../../../hooks/filtros/useFiltro.js";
 
-function FiltroPedidos({ setFuncion, setFiltros, setAlertaFiltro, filtros }) {
-  const { datos, setDatos } = useContext(contexto);
-  const [select, setSelect] = useState(true);
-  const [error, setError] = useState('');
-  const verificacionFiltro = (condicion) => {
-    if (filtros.length < 1) return [];
-    return filtros.filter(filtro =>
-      (condicion && filtro.idEspecificaciones) || (!condicion && filtro.idEstadoPedido)
-    );
-  }
-  const [opcionEspecificaciones, setOpcionEspecificaciones] = useState(verificacionFiltro(true) || []);
-  const [opcionEstado, setOpcionEstado] = useState(verificacionFiltro(false) || []);
-  const [filtroActivo, setFiltroActivo] = useState('estado');
+function FiltroPedidos() {
+  const {handleFiltrar,handleChangeSelectEspecificaciones, handleChangeSelectEstado, 
+    setFiltroActivo,
+    opcionEspecificaciones, opcionEstado, filtroActivo,
+    loading, errorFetch,
+   } = useFiltro()
+  const {datos} = useGlobalContext();
 
-  useEffect(() => {
-    setFuncion(() => {
-      const espId = opcionEspecificaciones.map(esp => esp.idEspecificaciones);
-      return (libro) => {
-        return (
-          (opcionEstado.includes(libro.estadoPedido.idEstadoPedido)) ||
-          (libro.especificaciones.some(esp => espId.includes(esp.idEspecificaciones))) ||
-          (opcionEspecificaciones.length <= 0 || opcionEstado.length <= 0)
-        );
-      }
-    });
-  }, [filtros])
-
-  const handleFiltrar = async () => {
-    setFiltros([...opcionEstado, ...opcionEspecificaciones]);
-    const espId = opcionEspecificaciones.map(esp => esp.idEspecificaciones);
-    const especificacionesStr = encodeURIComponent(JSON.stringify(espId));
-    const estadoId = opcionEstado.map(estado => estado.idEstadoPedido);
-    const estadoStr = encodeURIComponent(JSON.stringify(estadoId));
-    const endpoint = `/busqueda?estado=${estadoStr}&especificaciones=${especificacionesStr}`;
-    
-    filtrarPedidos(endpoint, setError, datos.listaPedidoLibros, setDatos);
-    
-    setFuncion(() => {
-      return (libro) => {
-        return (
-          (opcionEstado.includes(libro.estadoPedido.idEstadoPedido)) ||
-          (libro.especificaciones.some(esp => espId.includes(esp.idEspecificaciones))) ||
-          (opcionEspecificaciones.length <= 0 || opcionEstado.length <= 0)
-        );
-      }
-    });
-
-    setAlertaFiltro(false);
-  }
-
-  const handleChangeSelectEspecificaciones = (event) => {
-    const id = event.target.value;
-    const checked = event.target.checked;
-    const selectedEspecificaciones = datos.especificaciones.find(esp => esp.idEspecificaciones === parseInt(id));
-    if (checked) {
-      setOpcionEspecificaciones((prevOpcion) => [...prevOpcion, selectedEspecificaciones]);
-    } else {
-      setOpcionEspecificaciones((prevOpcion) => prevOpcion.filter((item) => item.idEspecificaciones !== selectedEspecificaciones.idEspecificaciones));
-    }
-  };
-
-  const handleChangeSelectEstado = (event) => {
-    const id = event.target.value;
-    const checked = event.target.checked;
-    const selectedEstado = datos.estados.find(estado => estado.idEstadoPedido === parseInt(id));
-    if (checked) {
-      setOpcionEstado((prevOpcion) => [...prevOpcion, selectedEstado]);
-    } else {
-      setOpcionEstado((prevOpcion) => prevOpcion.filter((item) => item.idEstadoPedido !== selectedEstado.idEstadoPedido));
-    }
-  };
-
-  const handleSelectEspecificaciones = () => {
-    setFiltroActivo('especificaciones')
-    setSelect(false)
-  }
-
-  const handleSelectEstado = () => {
-    setFiltroActivo('estado')
-    setSelect(true)
-  }
+  if (loading || errorFetch ) return(
+    <>
+    {errorFetch
+              ? (<h6>`Error al cargar el filtro: ${errorFetch}`</h6>)
+              : <h6>Cargando filtros ...</h6>}
+    </>
+  )
 
   return (
     <FiltroEstilo
@@ -97,12 +30,12 @@ function FiltroPedidos({ setFuncion, setFiltros, setAlertaFiltro, filtros }) {
       childrenDerecha={
         <>
           <li
-            onClick={handleSelectEstado}
+            onClick={()=>setFiltroActivo('estado')}
             className={filtroActivo === 'estado' ? 'filtro-activo' : ''}
             title='Estado'
           >Estado</li>
           <li
-            onClick={handleSelectEspecificaciones}
+            onClick={()=>setFiltroActivo('especificaciones')}
             className={filtroActivo === 'especificaciones' ? 'filtro-activo' : ''}
             title='Especificaciones'
           >Especif...</li>
@@ -110,7 +43,7 @@ function FiltroPedidos({ setFuncion, setFiltros, setAlertaFiltro, filtros }) {
       }
       childrenIzquierda={
         <>
-          {select ? (
+          {filtroActivo === 'estado' ? (
             <ul>
               {datos.estados.map((estadoPedido, index) => (
                 <li key={`estado-${index}`}>

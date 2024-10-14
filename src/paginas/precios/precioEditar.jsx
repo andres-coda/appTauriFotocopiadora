@@ -1,34 +1,43 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './mostrarPrecios.css'
-import { eliminarPrecio } from '../../servicios/precios.service';
 import Cargando from '../../componentes/cargando/cargando';
 import BotonEditar from '../../componentesStilos/botones/botonEditar';
 import BotonEliminar from '../../componentesStilos/botones/botonEliminar';
-import AlertaFormulario from '../../componentes/alertas/alertaFormulario/alertaFormulario';
 import CargarPrecio from './cargarPrecio';
 import AlertaEliminar from '../../componentes/alertas/alertaEliminar/alertaEliminar';
+import Modal from '../../componentes/modal/modal';
+import usePrecioCargar from '../../hooks/precio/cargar/usePrecioCargar';
+import { useModalContext } from '../../contexto/modalContexto';
 
 function EditarPrecio({ precio }) {
-  const [editPrecio, setEditPrecio] = useState(false);
-  const [cargando, setCargando] = useState(false);
   const [eliminar, setEliminar] = useState(false);
-  const [error, setError] = useState('')
+  const [ editar, setEditar] = useState(false);
+  
+  const {
+    errorEliminar,loadingEliminar,responseEliminar, handleEliminar,
+  } = usePrecioCargar(precio);
 
-  const handleEliminar = async () => {
-    if (precio.idPrecios<= 8) {
-      setError((prev)=>({...prev, error: 'No se puede eliminar este precio'}));
-      return
-    }
-    setCargando(true);
-    const precioEliminar = await eliminarPrecio(precio.idPrecios, setError);
-    if (precioEliminar) {
-      setCargando(false);
+  const {estadoModal,setEstadoModal} = useModalContext();
+
+  useEffect(()=>{
+    if (!estadoModal){
+      setEditar(false);
       setEliminar(false);
     }
-    }
+  },[estadoModal])
 
-  if (cargando) return (
-    <Cargando text={'Se esta procesando la eliminación del precio'} error={error} />
+  if (errorEliminar || loadingEliminar || responseEliminar) return (
+    <Modal
+          children={
+    <Cargando text={
+      errorEliminar ? (
+        `Error al intentar eliminar el precio: ${errorEliminar}`
+      ) : (
+        loadingEliminar 
+        ? ('Se esta procesando la eliminación del precio ...')
+        : ('Precio eliminado con éxito')
+      )} />
+    }/>
   )
 
   return (
@@ -39,13 +48,13 @@ function EditarPrecio({ precio }) {
           <p className='alin-derecha'>${precio.importe}</p>
           <BotonEditar 
             clase={'btn-editar-normal'}
-            onClick={() =>{console.log(precio), setEditPrecio(true)}}
+            onClick={() =>{setEditar(true), setEstadoModal(true)}}
             titulo={'Editar precio'}
           />
           {precio.idPrecios > 8 
             ? <BotonEliminar 
                 clase={'btn-editar-normal'}
-                onClick={() => setEliminar(true)}
+                onClick={() => {setEliminar(true), setEstadoModal(true)}}
               />
             : <BotonEliminar 
                 clase={'btn-editar-normal edi-desactivado'}
@@ -53,27 +62,16 @@ function EditarPrecio({ precio }) {
           }
         </div>
       </div>
-      <AlertaFormulario
-        isAlerta={editPrecio}
-        setIsAlerta={setEditPrecio}
-        children={
-          <CargarPrecio
-            precioAeditar={precio}
-          />
-        }
-      />
-      <AlertaFormulario
-        isAlerta={eliminar}
-        setIsAlerta={setEliminar}
-        children={
-            <AlertaEliminar 
-            children={<h6>{`Confirmar eliminar el precio ${precio.tipo}`}</h6>}
-            setEliminar={setEliminar}
+      {editar ?  <Modal children={ <CargarPrecio precioAeditar={precio} /> } />: null}
+      {eliminar ? (
+        <Modal
+        children={ <AlertaEliminar 
+            children={<h6>{`Eliminar el precio ${precio.tipo}`}</h6>}
             handleEliminar={handleEliminar}
             />
-            
-        }
+          }
       />
+      ): null}
     </>
   )
 }

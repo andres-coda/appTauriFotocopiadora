@@ -51,7 +51,7 @@
     transform: translateY(-50%);
     color: var(--color1);
     font-size: 1em;
-    font-weight: 400;
+    font-weight: 350;
     pointer-events: none;
     transition: all 0.2s ease;
     background-color: transparent;

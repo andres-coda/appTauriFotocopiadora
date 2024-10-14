@@ -4,16 +4,30 @@ import Buscar from "../../../assets/buscar.svg"
 import Formulario from "../../../componentes/formulario/formulario";
 import ClienteCargarInterno from "./clienteCargarInterno";
 import Cargando from "../../../componentes/cargando/cargando";
-import AlertaFormulario from "../../../componentes/alertas/alertaFormulario/alertaFormulario";
 import useClienteForm from "../../../hooks/cliente/cargar/useClienteForm";
+import Modal from "../../../componentes/modal/modal";
 
 function ClienteCargar() {
-  const {handleAtras, handleForm, onchange, handleListaClientes, 
-    errorPost, loading, response, 
-    errorPut, loadingPut, responsePut, 
+  const {handleAtras, cargarCliente, onchange, handleListaClientes, 
+    errorPost, loading, response,
     info, errorFrom, 
-    coincidencias, alertaCoincidencia, handleSelec,
-    alerta, setAlerta } = useClienteForm();
+    coincidencias, alertaCoincidencia, handleSelec
+  } = useClienteForm();
+
+  if (loading || errorPost || response) return (
+    <Modal
+      children={
+        <Cargando children={
+          loading 
+            ? (<h6>Cargando el cliente</h6>) 
+            : errorPost 
+              ? (<h6>`Error al cargar el cliente: ${errorPost}`</h6>) 
+              : <h6>Cliente cargado con exito</h6>
+        } />
+      }
+    />
+  )
+
 
   return (
     <>
@@ -34,7 +48,7 @@ function ClienteCargar() {
         }
       />
       <Formulario
-        handleForm={handleForm}
+        handleForm={cargarCliente}
         textBtn={'Confirmar'}
         subtitulo={'Guardar cliente'}
         error={errorFrom.error}
@@ -48,17 +62,6 @@ function ClienteCargar() {
             handleSelec={handleSelec}
 
           />
-        }
-      />
-      <AlertaFormulario 
-        isAlerta={alerta}
-        setIsAlerta={setAlerta}
-        children={
-          <>
-            {errorPost || errorPut ? <Cargando text={errorPost ? errorPost : errorPut} /> : null}
-            {response || responsePut ? <Cargando text={response ? 'Cliente creado con exito' : 'Cliente actualizado con exito'} /> : null}
-            {loading || loadingPut ? <Cargando text={loading ? 'Se esta creando el cliente ...' : 'Se esta actualizando el cliente ...'} /> : null}
-          </>
         }
       />
     </>

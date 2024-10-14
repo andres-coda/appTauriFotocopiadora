@@ -133,3 +133,16 @@
     background-color: var(--color10);
 }
 
+.pedido-conteiner {
+    display: grid;
+    width: 100%;
+    box-sizing: border-box;
+    grid-template-columns: 1fr; /* Una columna por defecto */
+}
+
+@media (min-width: 600px) {
+    .pedido-conteiner {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 0.5rem;/* Dos columnas en pantallas más pequeñas */
+    }
+}

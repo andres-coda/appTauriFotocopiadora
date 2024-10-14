@@ -1,5 +1,5 @@
 import './heder.css'
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Nuevo from '../../assets/nuevo.svg';
 import ListaPedidos from '../../assets/pedidos.svg'
 import Libros from '../../assets/books.svg'
@@ -11,17 +11,17 @@ import MenuCerrado from '../../assets/menu.svg'
 import ArrowLeft from '../../assets/arrowLeft.svg'
 import ArrowRifht from '../../assets/arrowRight.svg'
 import Cancelar from '../../assets/cancel.svg'
-import { contexto } from '../../contexto/contexto';
+import { useGlobalContext } from '../../contexto/contexto';
 import { Link } from 'react-router-dom';
 import { rutaPublica, rutasGenerales } from '../../rutas/rutas';
-import usePedidoUtilidades from '../../hooks/pedido/cargar/usePedidoUtilidades';
+import usePedidoManager from '../../hooks/pedido/cargar/usePedidoManager';
 
 function Heder() {
   const [menu, setMenu] = useState(false);
-  const { pedidos, currentPedidoIndex, userLogin } = useContext(contexto);
+  const { pedidos, currentPedidoIndex, userLogin } = useGlobalContext();
   const [claseActiva, setClaseActiva] = useState('');
 
-  const {nuevoPedido, pedidoAnterior, pedidoSiguiente, eliminarPedido} = usePedidoUtilidades();
+  const {nuevoPedido, pedidoAnterior, pedidoSiguiente, eliminarPedido} = usePedidoManager();
 
   const handleClaseActiva = (clase) => {
     setClaseActiva(clase);

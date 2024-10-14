@@ -1,32 +1,32 @@
 import { useContext, useEffect, useState } from "react";
 import { contexto } from "../../contexto/contexto";
 import { useNavigate } from "react-router-dom";
-import usePostApi from "../Api/usePostApi";
-import usePutApi from "../Api/usePutApi";
+import useApi from "../../servicios/Api/useApi";
+import { useModalContext } from "../../contexto/modalContexto";
 
-function useFormGeneral(validacion, url, infoInicial, infoAEditar, errorInicial, adapter) {
-  const { setDatos } = useContext(contexto);
-  const [alerta, setAlerta] = useState(false);
-  const navigate = useNavigate();
+function useFormGeneral(infoInicial, errorInicial=null, infoAEditar=null) {
+  const { setEstadoModal} = useModalContext();
+  const [condicionModal, setCondicionModal ] = useState(false);
 
-  const [errorFrom, setErrorFrom] = useState(errorInicial);
-  const [claseError, setClaseError] = useState('sugerencia-error');
+  const [errorFrom, setErrorFrom] = useState(errorInicial || {});
 
   const [info, setInfo] = useState(infoAEditar || infoInicial);
 
-  const { postData, error: errorPost, loading, response } = usePostApi(url, adapter);
-  const { putData, error: errorPut, loading: loadingPut, response: responsePut } = usePutApi(url, adapter);
+  const { fetchData, errorFetch, loading, response } = useApi();
+
+
 
   useEffect(() => {
-    if (response || responsePut) {
-      setDatos((prev) => ({ ...prev, clienteAEditar: null, libroAEditar:null }));
+    if (response) {
+      setCondicionModal(true);
       setInfo(infoInicial);
       setErrorFrom(errorInicial);
     } 
-    if (!response && !responsePut) {
-      setAlerta(false);
+    if (condicionModal) {
+      setCondicionModal(false);
+    setEstadoModal(false);
     }
-  }, [response, responsePut]);
+  }, [response]);
 
   const onchange= (e) => {
     const {name, value} = e.target;    
@@ -36,28 +36,21 @@ function useFormGeneral(validacion, url, infoInicial, infoAEditar, errorInicial,
     }));
   }
 
-  const handleForm = async (infoEnviar) => {
+  const handleForm = async (url, infoEnviar, JsonFunction=false, validacion, adapter) => {
     const datoEnviar = infoEnviar || info;
     const newError = validacion(datoEnviar);
-
+    
     if (newError.error) {
       setErrorFrom(newError);
-      setClaseError('');
       return
     }
 
-    setAlerta(true);
+    const method = infoAEditar ? 'PUT' : 'POST'
+    setEstadoModal(true);
 
-    if (infoAEditar) {
-      await putData(datoEnviar);
-    } else {
-      await postData(datoEnviar);
-    }
-  }
+    const datoGuardar = JsonFunction ? JSON.stringify(datoEnviar) : datoEnviar
 
-  const handleAtras = () => {
-    setDatos((prev)=>({...prev, clienteAEditar:null, libroAEditar:null}));
-    navigate(-1);
+    await fetchData(url, datoGuardar, method, adapter);
   }
 
   const recetear = () => {
@@ -65,12 +58,12 @@ function useFormGeneral(validacion, url, infoInicial, infoAEditar, errorInicial,
     setErrorFrom(errorInicial);
   }
 
+
+
   return { 
-    handleForm, handleAtras, onchange, recetear, 
-    errorPost, loading, response, 
-    errorPut, loadingPut, responsePut, 
-    info, errorFrom, setInfo, claseError,
-    alerta, setAlerta}
+    handleForm, onchange, recetear, 
+    errorFetch, loading, response, 
+    info, errorFrom, setInfo}
 }
 
 export default useFormGeneral;

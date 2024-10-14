@@ -4,7 +4,8 @@ import RutaFalsa from "./rutaFalsa";
 import { lazy } from "react";
 import LibroMostrar from '../paginas/libro/mostrar/libroMostrar.jsx'
 import LibroGrande from "../paginas/libro/mostrar/libroGrande.jsx";
-import PedidoCargar from "../paginas/pedidos/cargar/pedidoCargar.jsx";
+import CargarPedidoManager from "../paginas/pedidos/cargar/cargarPedidoManager.jsx";
+import MostrarPrecios from '../paginas/precios/mostrarPrecios.jsx'
 
 const ListaUsuarios = lazy(()=> import('../paginas/usuario/lista/usuarioLista'));
 const ListaPedidosMostrar = lazy(() => import("../paginas/pedidos/lista/listaPedidosMostrar"));
@@ -15,14 +16,14 @@ const ClienteMostrar = lazy(() => import("../paginas/cliente/mostrar/clienteMost
 const ClienteMostrarIndividual = lazy(() => import("../paginas/cliente/mostrar/clienteMostrarIndividual"));
 const MostrarEscuela = lazy(()=> import('../paginas/escuela/mostrar/mostrarEscuela.jsx'))
 const CursosGeneral = lazy(()=> import('../paginas/cursos/cursosGeneral.jsx'))
-const MostrarPrecios = lazy(()=> import('../paginas/precios/mostrarPrecios.jsx'));
+//const MostrarPrecios = lazy(()=> import('../paginas/precios/mostrarPrecios.jsx'));
 
 function RutasPrivadas() {
   return (
     <RutaFalsa
       children={
         <>
-          <Route path={'/'} element={<ListaUsuarios />} />
+          <Route path={'/'} element={<LibroMostrar />} />
           <Route path={rutaPrivada.USUARIOS} element={<ListaUsuarios />} />
           <Route path={rutaPrivada.CLIENTEINDIVIDUAL} element={<ClienteMostrarIndividual />} />
           <Route path={rutaPrivada.CLIENTES} element={<ClienteMostrar />} />
@@ -35,7 +36,7 @@ function RutasPrivadas() {
           <Route path={rutaPrivada.ESCUELAS} element={<MostrarEscuela />} />
           <Route path={rutaPrivada.CURSOS} element={<CursosGeneral />} />
           <Route path={rutaPrivada.PRECIOS} element={<MostrarPrecios />} />
-          <Route path={rutaPrivada.PEDIDONUEVO} element={<PedidoCargar />} />
+          <Route path={rutaPrivada.PEDIDONUEVO} element={<CargarPedidoManager />} />
         </>
       }
     />

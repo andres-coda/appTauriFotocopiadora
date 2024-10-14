@@ -1,4 +1,17 @@
 export const validarEspecifPedidos = (esp, espActuales, listaEsp) => {
+  console.log('espActuales' , espActuales);
+  console.log('Esp' , esp);
+  console.log('Lista' , listaEsp);
+  
+  
+  let nuevaEspecificacion = [];  
+
+  
+  if (espActuales.length==0 || !Array.isArray(espActuales)) {
+    nuevaEspecificacion.push(esp);
+    return nuevaEspecificacion;
+    }
+
     const espQueNo = [];
 
     switch (esp.idEspecificaciones) {
@@ -27,12 +40,12 @@ export const validarEspecifPedidos = (esp, espActuales, listaEsp) => {
         break;
     }
 
-    let nuevaEspecificacion;
+    const isEspPresent = espActuales.some(item => item.idEspecificaciones === esp.idEspecificaciones);
 
-    if (espActuales.includes(esp)) {
-      nuevaEspecificacion = espActuales.filter(item => item !== esp);
+    if (isEspPresent) {
+      nuevaEspecificacion = espActuales.filter(item => item.idEspecificaciones !== esp.idEspecificaciones);
     } else {
-      nuevaEspecificacion = espActuales.filter(item => !espQueNo.includes(item));
+      nuevaEspecificacion = espActuales.filter(item => !espQueNo.some(espExcl => espExcl.idEspecificaciones === item.idEspecificaciones));
       nuevaEspecificacion.push(esp);
     }
 
