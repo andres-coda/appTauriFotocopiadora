@@ -8,13 +8,20 @@
   },
   "package": {
     "productName": "app-2",
-    "version": "0.1.0"
+    "version": "0.2.52"
   },
   "tauri": {
     "allowlist": {
-      "all": false,
+      "http": {
+        "request": true,
+        "all": true 
+      },
+      "fs": {
+        "all": true
+      },
+      "all": true,
       "shell": {
-        "all": false,
+        "all": true,
         "open": true
       }
     },
@@ -34,7 +41,7 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self' http://200.58.105.74:3001/ https://* data: blob: filesystem:;"
     },
     "bundle": {
       "active": true,

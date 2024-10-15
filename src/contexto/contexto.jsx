@@ -20,6 +20,7 @@ export const ProveiderContext = ({ children }) => {
     funcionLibro: ()=> (elemento) => true ,
     funcionPedido: ()=> (elemento) => true ,
     filtro: [{tipo:'', filtro:''}],
+    busqueda:null
   })
   const [currentPedidoIndex, setCurrentPedidoIndex] = useState(0);
   const [userLogin, setUserLogin] = useState(JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : {email:''});
@@ -237,15 +238,12 @@ export const ProveiderContext = ({ children }) => {
     };
   }, [datos.clientes, datos.clienteActual]);
 
-  useEffect(()=>{
-    console.log('Pedido inicial local',pedidoInicilLocal);    
+  useEffect(()=>{ 
     setUserLogin(JSON.parse(localStorage.getItem('user')));
-    leerClientes(setDatos, setError);
     leerEstados(setDatos, setError);
     leerEspecificaciones(setDatos, setError);
     leerEscuelas(setDatos, setError);
     leerMaterias(setDatos, setError);
-    leerLibros(setDatos, setError);
     leerPrecios(setDatos, setError);
     leerCursos(setDatos,setError);
   },[]);

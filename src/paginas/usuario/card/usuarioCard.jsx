@@ -7,20 +7,19 @@ import { contexto } from '../../../contexto/contexto';
 import Cargando from '../../../componentes/cargando/cargando';
 import { cambioarRolUser } from '../../../servicios/usuarios.service.js';
 import BotonFormulario from '../../../componentesStilos/botones/botonFormulario.jsx';
+import useUsuarios from '../../../hooks/usuarios/useUsuarios.js';
+import Modal from '../../../componentes/modal/modal.jsx';
+import { useModalContext } from '../../../contexto/modalContexto.jsx';
 
 function UsuarioCard({ user, editar }) {
-  const { datos, setDatos } = useContext(contexto);
-  const [alerta, setAlerta] = useState(false);
-  const [error, setError] = useState('')
+  const { setEstadoModal} = useModalContext();
+  const {
+    response, errorFetch, loading, handleCambiarRolUser,
+  } = useUsuarios()
 
-  const handleCambiarRolUser = async () => {
-    cambioarRolUser(user, datos, setDatos, setError);
-    setAlerta(false)
-  }
-
-  if (!user) return (
-    <Cargando />
-  )
+  const [modalLocal, setModalLocal] = useState(false);
+  
+  if (!user) return null
 
   return (
     <>
@@ -29,22 +28,37 @@ function UsuarioCard({ user, editar }) {
         <p>Rol: {user.role}</p>
         {editar ? (
           <BotonFormulario 
-            onClick={() => setAlerta(true)}
+            onClick={() => {setEstadoModal(true), setModalLocal(true)}}
             textBtn={'Cambiar de rol'}
           />
         ) : (null)}
       </div>
-      <AlertaFormulario
-        isAlerta={alerta}
-        setIsAlerta={setAlerta}
+      <Modal
         children={
-          <AlertaEliminar
-            children={<h6>{`Seguro que desea cambiar de rol al usuario ${user.email}?`}</h6>}
-            setEliminar={setAlerta}
-            handleEliminar={handleCambiarRolUser}
-            error={error}
-          />
+          loading || response || errorFetch
+            ?  (
+              <Cargando 
+          text={
+            <>
+              { loading 
+                ? 'Cambiando rol de usuario ...' 
+                : errorFetch
+                  ? `Error al intentar cambiar el rol del usuario: ${errorFetch}`
+                  : 'Usuario cambiado de rol con éxito'
+                }
+            </>
+            }/>
+            )
+            : (
+              <AlertaEliminar
+                children={<h6>{`Seguro que desea cambiar de rol al usuario ${user.email}?`}</h6>}
+                setEliminar={setEstadoModal}
+                handleEliminar={()=>handleCambiarRolUser(user)}
+                error={errorFetch}
+              />
+            )
         }
+        modal={modalLocal} setModal={setModalLocal}
       />
     </>
   )

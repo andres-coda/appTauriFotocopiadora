@@ -24,7 +24,7 @@ function MostrarProfMat( {prMat, handleCurso, eliminar, handleEliminarProfeMater
     </div>
     <Modal children={
       <AlertaEliminar 
-        children={<h6>Quitar el profesor y la materia de la escuela</h6>}
+        children={<h6>Quitar el profesor y la materia</h6>}
         setEliminar={setEstadoModal}
         handleEliminar={() => {handleEliminarProfeMateria(prMat), setAlertaEliminar(false)}}
       />

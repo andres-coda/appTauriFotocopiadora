@@ -73,28 +73,28 @@ function PedidoMostrarCard({ libro }) {
           />
         </div>
       </div>
-      {irCambiarEstado ? (
-        <Modal children={
-          <CambiarEstado
-            estadoClase={estadoClas}
-            libroPedido={libro}
-          />
-        } />
-      ) : null}
-      {irAPedido ? (
-        <Modal
-          children={
-            <>
-              {
-                loading
-                  ? (<h6>Cargando pedido ...</h6>)
-                  : errorFetch
-                    ? (<h6>{`Error al cargar pedido: ${errorFetch}`}</h6>)
-                    : <h6>Pedido cargado con exito, redirigiendo ...</h6>
-              }
-            </>
-          } />
-      ) : (null)}
+      <Modal children={
+        <CambiarEstado
+          estadoClase={estadoClas}
+          libroPedido={libro}
+        />
+      }
+        modal={irCambiarEstado} setModal={setIrCambiarEstado}
+      />
+      <Modal
+        children={
+          <>
+            {
+              loading
+                ? (<h6>Cargando pedido ...</h6>)
+                : errorFetch
+                  ? (<h6>{`Error al cargar pedido: ${errorFetch}`}</h6>)
+                  : <h6>Pedido cargado con exito, redirigiendo ...</h6>
+            }
+          </>
+        }
+        modal={irAPedido} setModal={setIrAPedido}
+      />
     </>
   )
 }

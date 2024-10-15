@@ -1,21 +1,16 @@
-import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { contexto } from "../../../contexto/contexto";
-import { actualizarLiastaUsers } from "../../../servicios/usuarios.service";
+import { useGlobalContext } from "../../../contexto/contexto";
 import MiniNav from "../../../componentes/miniHeder/miniNav";
 import LeftArrow from "../../../assets/arrowLeft.svg"
 import Cargando from "../../../componentes/cargando/cargando";
 import UsuarioCard from "../card/usuarioCard";
+import useUsuarios from "../../../hooks/usuarios/useUsuarios";
 
 function ListaUsuarios() {
-    const { datos, setDatos } = useContext(contexto);
-    const [ error, setError ] = useState('');
+    const { datos } = useGlobalContext();
+    const {errorFetch, loading } = useUsuarios();
     const navigate = useNavigate();
-
-    useEffect(()=>{
-      actualizarLiastaUsers(setDatos, setError);
-    },[]);
-  
+    
     return (
       <>
       <MiniNav
@@ -34,7 +29,18 @@ function ListaUsuarios() {
           datos.listaUsers?.map((user, index) =>(
             <UsuarioCard user={user} key={`user-${index}`} editar={true}/>
           ))
-        ) : ( <Cargando />)
+        ) : ( 
+        <Cargando 
+          text={
+            <>
+              { loading 
+                ? 'Cargando lista de usuarios' 
+                : errorFetch
+                  ? `Error al intentar leer la lista de usuarios: ${errorFetch}`
+                  : 'Lista de usuarios lista'
+                }
+            </>
+            }/>)
       }
       </>
     )

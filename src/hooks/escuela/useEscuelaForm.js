@@ -18,6 +18,7 @@ function useEscuelaForm (escAEditar){
     const cargarEscuela = async () => {
       await handleForm(url, escuela, true, validarErrorEscuela, escuelaAdapter);
     }
+    
   
     return {
       onchange, cargarEscuela, 

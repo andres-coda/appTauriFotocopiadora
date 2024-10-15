@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
 import './libroMostrar.css';
-import { contexto } from '../../../contexto/contexto';
+import { useGlobalContext } from '../../../contexto/contexto';
 import { useNavigate } from 'react-router-dom';
 import MiniNav from '../../../componentes/miniHeder/miniNav';
 import LeftArrow from '../../../assets/arrowLeft.svg'
@@ -10,41 +9,20 @@ import LibroSuperCard from '../card/libroSuperCard';
 import LibroEstadoCard from '../card/libroEstadoCard'
 import LibroCargar from '../cargar/libroCargar'
 import AlertaEliminar from '../../../componentes/alertas/alertaEliminar/alertaEliminar';
-import { eliminarLibro } from '../../../servicios/libro.service';
 import Modal from '../../../componentes/modal/modal';
 import { useModalContext } from '../../../contexto/modalContexto';
+import useLibroMostrar from '../../../hooks/libro/mostrar/useLibroMostrar';
+import Cargando from '../../../componentes/cargando/cargando';
 
 function LibroGrande() {
-  const { datos, setDatos } = useContext(contexto);
-  const { estadoModal, setEstadoModal } = useModalContext()
+  const { datos, setDatos } = useGlobalContext();
+  const { setEstadoModal } = useModalContext();
+  const {
+    alertaEditar, setAlertaEditar, alertaEliminar, setAlertaEliminar,
+    handleEditar, handleEliminar,
+    errorFetch, loading, solicitud, setSolicitud,
+  } = useLibroMostrar()
   const navigate = useNavigate();
-  const [alertaEditar, setAlertaEditar] = useState(false);
-  const [alertaEliminar, setAlertaEliminar] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleEditar = () => {
-    const libroAEditar = datos.libroActual;
-    setDatos((prev) => ({ ...prev, libroAEditar: libroAEditar }))
-    setAlertaEditar(true);
-    setEstadoModal(true);
-  }
-
-  useEffect(() => {
-    if (!estadoModal) {
-      setAlertaEditar(false);
-      setAlertaEliminar(false);
-    }
-  }, [estadoModal])
-
-  const handleEliminar = async () => {
-    await eliminarLibro(datos.libroActual.idLibro, setError);
-    if (!error) {
-      setEstadoModal(false);
-      setDatos((prev) => ({ ...prev, libroActual: null }))
-    }
-  }
-
-  if (!datos.libroActual) return null;
 
   return (
     <>
@@ -72,31 +50,46 @@ function LibroGrande() {
           </>
         }
       />
-      <LibroSuperCard libro={datos.libroActual} />
-      <div className={`libro-pedidos-estados`}>
-        {datos.libroActual.stock
-          ?.sort((a, b) => a.estado.idEstadoPedido - b.estado.idEstadoPedido)
-          .map((stock, index) => (
-            <LibroEstadoCard key={`stock-${index}`} stock={stock} />
-          ))}
-      </div>
       {
-      alertaEliminar
-        ? (
-          <Modal
-            children={
-              <AlertaEliminar
-                children={<h6>{`¿Seguro que quiere eliminar el libro ${datos.libroActual.nombre}?`}</h6>}
-                setEliminar={setAlertaEliminar}
-                handleEliminar={handleEliminar}
-                error={error}
-              />
-            }
-          />
-        ) 
-        : null
-      }
-      { alertaEditar  ? ( <Modal children={ <LibroCargar /> } /> ) : (null) }
+        !datos.libroActual ? null : (
+          <>
+            <LibroSuperCard libro={datos.libroActual} />
+            <div className={`libro-pedidos-estados`}>
+              {datos.libroActual.stock
+                ?.sort((a, b) => a.estado.idEstadoPedido - b.estado.idEstadoPedido)
+                .map((stock, index) => (
+                  <LibroEstadoCard key={`stock-${index}`} stock={stock} />
+                ))}
+            </div>
+            <Modal
+              children={
+                <AlertaEliminar
+                  children={<h6>{`¿Seguro que quiere eliminar el libro ${datos.libroActual.nombre}?`}</h6>}
+                  setEliminar={setAlertaEliminar}
+                  handleEliminar={handleEliminar}
+                  error={errorFetch}
+                />
+              }
+              modal={alertaEliminar} setModal={setAlertaEliminar}
+            />
+          </>
+        )}
+        <Modal children={<LibroCargar />} modal={alertaEditar} setModal={setAlertaEditar} />
+            <Modal
+              children={
+                <Cargando
+                  text={
+                    <>
+                      {loading
+                        ? 'Eliminando libro ...'
+                        : errorFetch
+                          ? `Error al intentar eliminar el libro: ${errorFetch}`
+                          : 'Libro eliminado con éxito'
+                      }
+                    </>
+                  } />
+              }
+              modal={solicitud} setModal={setSolicitud} />
     </>
   )
 }

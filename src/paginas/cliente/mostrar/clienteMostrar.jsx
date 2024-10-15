@@ -4,24 +4,17 @@ import LeftArrow from "../../../assets/arrowLeft.svg"
 import Nuevo from "../../../assets/nuevo.svg"
 import Cargando from '../../../componentes/cargando/cargando';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import { contexto } from '../../../contexto/contexto';
+import { useContext, useEffect, useState } from 'react';
+import { contexto, useGlobalContext } from '../../../contexto/contexto';
 import ClienteBuscar from '../buscar/clienteBuscar'
 import ClienteCardDatos from '../card/clienteCardDatos'
 import { rutasGenerales } from '../../../rutas/rutas';
+import useClienteMostrar from '../../../hooks/cliente/mostrar/useClienteMostrar';
 
 function ClienteMostrar() {
-  const { datos } = useContext(contexto);
-  const navigate= useNavigate()
+  const { datos} = useGlobalContext();
+  const { loading, errorFetch, handleAtras, handleNuevoCliente} = useClienteMostrar();
   const [filterCliente, setFilterCliente] = useState(() => (cliente) => true);
-
-  const handleAtras=()=>{
-    navigate(-1);
-  }
-
-  const handleNuevoCliente = () => {
-    navigate(rutasGenerales.CLIENTENUEVO);
-  };
 
   return (
     <>
@@ -44,20 +37,29 @@ function ClienteMostrar() {
       <ClienteBuscar
         setFilterCliente={setFilterCliente}
       />
-
-      <ul className='listaClientes'>
-        {datos.clientes
-          ? datos.clientes
+      {datos.clientes && datos.clientes.length > 0 ? (
+        <ul className='listaClientes'>
+          { datos.clientes
             .filter(filterCliente) // Filtrar los clientes según el criterio
             .map((cliente) => (
               <li key={`cliente-${cliente.idPersona}`}>
                 <ClienteCardDatos cliente={cliente} />
               </li>
-            )
-            ) : (
-            <Cargando />
-          )}
-      </ul>
+          ))}
+        </ul>
+      ) : (
+        <Cargando
+          text={
+            <>
+              {loading
+                ? 'Cargando lista de clientes'
+                : errorFetch
+                  ? `Error al intentar cargar la lista de clientes: ${errorFetch}`
+                  : 'Lista de clientes cargada'
+              }
+            </>
+          } />)
+      }
     </>
   )
 }

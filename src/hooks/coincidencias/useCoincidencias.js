@@ -5,7 +5,7 @@ function useCoinsidencias(datos,  condicion){
     const [alertaCoincidencia, setAlertaCoincidencia] = useState(false);
     
     useEffect(()=>{
-        if ( !condicion || !condicion.value || condicion.value.length < 1) {
+        if ( !condicion || !condicion.value || condicion.value.length < 1 ) {
             setCoincidencias([]);
             setAlertaCoincidencia(false);
             return

@@ -17,7 +17,8 @@ function ListaPedidosMostrar() {
   const { filtros, recetearFiltros } = useFiltro();
   const { setEstadoModal } = useModalContext()
   const { datos } = useContext(contexto);
-  const [tipoFiltro, setTipoFiltro] = useState(false)
+  const [tipoFiltro, setTipoFiltro] = useState(false);
+  const [modalFiltro, setModalFiltro] = useState(false)
 
   return (
     <>
@@ -31,19 +32,19 @@ function ListaPedidosMostrar() {
             ><img src={Reciclar} alt='Recetear busqueda' /></li>
             <li
               className='btn-add' title='Filtrar pedidos'
-              onClick={() => { setTipoFiltro(false), setEstadoModal(true) }}
+              onClick={() => { setTipoFiltro(false), setEstadoModal(true),setModalFiltro(true) }}
             ><img src={Filtrar} alt='Filtrar pedidos' /></li>
             <li
               className='btn-add'
               title='Ordenar pedidos'
-              onClick={() => { setTipoFiltro(true), setEstadoModal(true) }}
+              onClick={() => { setTipoFiltro(true), setEstadoModal(true),setModalFiltro(true) }}
             ><img src={Ordenar} alt='Ordenar pedidos' /></li>
           </>
         }
       />
       <h2 className='titulos'>Lista de pedidos</h2>
       <ListaFiltros lista={filtros.filtro} tipo={'pedido'}/>
-      <ListaFiltros lista={filtros.filtro.filter(fl => fl.tipo === 'orden')} />
+      <ListaFiltros lista={filtros.filtro} tipo={'orden'}/>
       {!datos.listaPedidoLibros || datos.listaPedidoLibros.pedidoLibros?.length <= 0 ? (
         <p>
           {`No hay pedidos ${filtros && filtros.length > 0
@@ -68,7 +69,11 @@ function ListaPedidosMostrar() {
         </div>
       )}
 
-      <Modal children={!tipoFiltro ? <FiltroPedidos /> : <FiltroOrdenarPedido />} />
+      <Modal 
+        children={!tipoFiltro ? <FiltroPedidos /> : <FiltroOrdenarPedido />} 
+        modal={modalFiltro}
+        setModal={setModalFiltro}
+      />
     </>
   )
 }

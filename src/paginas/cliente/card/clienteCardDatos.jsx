@@ -16,7 +16,7 @@ import useApi from '../../../servicios/Api/useApi';
 function ClienteCardDatos({cliente}) {
 	const { setDatos } = useContext(contexto);
 	const navigate = useNavigate();
-	const {loading, error, response, fetchData} = useApi(null, clienteAdapter);
+	const {loading, errorFetch, response, fetchData} = useApi(null, clienteAdapter);
 
 	useEffect(()=>{
 		if (response) {
@@ -29,8 +29,8 @@ function ClienteCardDatos({cliente}) {
 		fetchData(`${URL_CLIENTES}/${cliente.idPersona}`)
 	}
 
-	if (error) return (
-		<Cargando text={`Error al tratar de leer el cliente id: ${cliente.nombre || cliente.celular}, ${error}`}/>
+	if (errorFetch) return (
+		<Cargando text={`Error al tratar de leer el cliente id: ${cliente.nombre || cliente.celular}, ${errorFetch}`}/>
 	)
 
 	if (loading) return (
@@ -46,7 +46,7 @@ function ClienteCardDatos({cliente}) {
 					<p title={cliente.email}><img src={Email} alt='Email' /> {cliente.email}</p>
 				</div>
 				<div className='cliente-datos-interno-extra'>
-					<ParrafoClase clase={'pedido-pendiente'} texto={`Para retirar: ${contadorEstadoPedido(cliente.pedidos, [1, 2, 3])}`}/>
+					<ParrafoClase clase={'pedido-pendiente'} texto={`Pendiente: ${contadorEstadoPedido(cliente.pedidos, [1, 2, 3])}`}/>
 					<ParrafoClase clase={'pedido-paraRetirar'} texto={`Para retirar: ${contadorEstadoPedido(cliente.pedidos, [4])}`} />
 				</div>
 			</div>

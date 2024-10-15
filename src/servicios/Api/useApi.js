@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import useRetardo from "../../hooks/tiempo/useRetardo";
+import { useModalContext } from "../../contexto/modalContexto";
 
 function useApi(urlGet=null, adapterGet=null) {
     const [response, setResponse] = useState(null);
     const [loading, setLoading] = useState(false);
     const [errorFetch, setErrorFetch] = useState(null);
-    const [controlador, setControlador] = useState(false)
+    const [controlador, setControlador] = useState(false);
     
     const token = localStorage.getItem('token');
 
-    const retardoRecetRetardo = useRetardo(()=>setResponse(null), 3000)
+    const retardoRecetRetardo = useRetardo(()=>{setResponse(null)}, 3000)
 
     useEffect(()=>{
         if (controlador){

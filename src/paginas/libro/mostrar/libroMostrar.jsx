@@ -12,10 +12,17 @@ import LibroCargar from '../cargar/libroCargar';
 import Modal from '../../../componentes/modal/modal';
 import useFiltro from '../../../hooks/filtros/useFiltro';
 import { useModalContext } from '../../../contexto/modalContexto';
+import useLibroMostrar from '../../../hooks/libro/mostrar/useLibroMostrar';
+import Cargando from '../../../componentes/cargando/cargando';
+import { useGlobalContext } from '../../../contexto/contexto';
 
 function LibroMostrar() {
   const [buscador, setBuscador] = useState(()=>(libro)=>libro.nombre.toLowerCase().includes(''));
   const [alertaFiltro, setAlertaFiltro] = useState(false);
+  const {datos} = useGlobalContext()
+  const {
+    errorFetch, loading
+  } = useLibroMostrar();
 
   const {
     recetearFiltros, filtros,
@@ -53,12 +60,27 @@ function LibroMostrar() {
       <FiltroBuscarLibro 
         setFuncionBuscar={setBuscador}
       />
-      <div className='lista-libros'>
-      <LibroMostrarInterno
-        filtros={filtros.funcionLibro}
-        buscador={buscador}
-      />
-      </div>
+      {datos.libros.length>0 
+      ?(
+        <div className='lista-libros'>
+        <LibroMostrarInterno
+          filtros={filtros.funcionLibro}
+          buscador={buscador}
+        />
+        </div>        
+      ):(
+        <Cargando 
+        text={
+          <>
+            { loading 
+              ? 'Cargando lista de libros' 
+              : errorFetch
+                ? `Error al intentar cargar la lista de libros: ${errorFetch}`
+                : 'Lista de libros cargada'
+              }
+          </>
+          }/>
+      )}
       <Modal children={alertaFiltro ? <FiltrosLibros /> : <LibroCargar />}/>
   </>
   )

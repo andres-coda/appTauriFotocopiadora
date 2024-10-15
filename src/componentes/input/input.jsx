@@ -16,7 +16,7 @@ function Inputs({name, texto, tipo, handleOnChange, valor, clase, error, autocom
             />
             <label htmlFor={name}>{texto}</label>
         </div>
-            <span>{ error }</span>
+            {error ? <span>{ error }</span> : null }
             </div>
     )
 }
