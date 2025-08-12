@@ -4,10 +4,13 @@ const URL_BASE_local = 'http://localhost:3001';
 
 const URL_DONWEB_API = 'http://200.58.105.74:3001';
 
+//Esta es la que va
+const URL_DONWEB_WEB = 'https://www.deliberycopy.website'
+
 
 const URL_base_railway = "https://api-rest-production-387f.up.railway.app"
 
-export const URL_BASE = URL_DONWEB_API;
+export const URL_BASE = URL_DONWEB_WEB;
 export const URL_LIBROS = URL_BASE+'/libro';
 export const URL_CLIENTES = URL_BASE+'/persona';
 export const URL_PEDIDOS = URL_BASE+'/pedido';

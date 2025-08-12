@@ -7,22 +7,16 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "app-2",
-    "version": "0.2.52"
+    "productName": "Delibery copy",
+    "version": "0.2.64"
   },
   "tauri": {
     "allowlist": {
       "http": {
-        "request": true,
-        "all": true 
+        "all": true
       },
       "fs": {
         "all": true
-      },
-      "all": true,
-      "shell": {
-        "all": true,
-        "open": true
       }
     },
     "windows": [
@@ -41,7 +35,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self' http://200.58.105.74:3001/ https://* data: blob: filesystem:;"
+       "csp": "default-src 'self' https://www.deliberycopy.website; img-src 'self' data: https://* ; style-src 'self';"
     },
     "bundle": {
       "active": true,

@@ -1,82 +1,14 @@
-import { useContext, useEffect, useState } from "react";
 import Formulario from "../../../componentes/formulario/formulario";
 import Inputs from "../../../componentes/input/input";
-import { userLogin } from "../../../servicios/usuarios.service";
-import { contexto, useGlobalContext } from "../../../contexto/contexto";
 import Cargando from "../../../componentes/cargando/cargando";
-import useApi from "../../../servicios/Api/useApi";
-import useFormGeneral from "../../../hooks/form/useFormGeneral";
+import Modal from "../../../componentes/modal/modal.jsx";
+import useLogin from "../../../hooks/usuarios/useLogin.js";
 
-
-const errorInicialLogin = {
-  error: 'Todos los campos deben completarse',
-  email: '',
-  password: ''
-}
-
-const loginInicial = {
-  email: "",
-  password: ""
-}
-
-function useLogin() {
-  const loginInicialLocal = {...loginInicial}
-  const errorInicialLocal = {...errorInicialLogin}
-  const { setUserLogin } = useGlobalContext(contexto);
-  const {onchange, } =useFormGeneral(loginInicialLocal, errorInicialLocal)
-  const [usuario, setUsuario] = useState(loginInicialLocal);
-
-}
-
-function Login({validarErrores}) {
-  const { setUserLogin } = useGlobalContext(contexto);
-  const {} =useApi()
-  const [clasError, setClasError] = useState('sugerencia-error');
-  const [cargando, setCargando] = useState(false);
-  const [error, setError] = useState({
-    error: 'Todos los campos deben completarse',
-    email: '',
-    password: ''
-  });
-
-  useEffect(()=>{
-    if (error.error != 'Todos los campos deben completarse') {
-      setClasError('');
-    }
-  },[error.error]);
-
-  const [usuario, setUsuario] = useState(
-    {
-      email: "",
-      password: ""
-    }
-  );
-
-  const handleChange = (e) => {
-    setUsuario({
-      ...usuario,
-      [e.target.name]: e.target.value
-    });
-  };
-  
-
-  const handleLogin = async () => {
-    setClasError('')
-    const ifError = validarErrores(usuario);
-    if (ifError) {
-      setError(ifError);
-      setClasError('');
-      return
-    }
-    setCargando(true);
-    userLogin(usuario, setUserLogin, setError);
-  }
-
-  if (cargando) return (
-    <Cargando 
-      text={'Iniciando sesión ...'}
-    />
-  )
+function Login() {
+  const {
+    onchange, handleLogin, errorFrom, usuario,
+    errorLogin, loading,loadApi
+  } = useLogin();  
 
   return (
     <>
@@ -84,17 +16,16 @@ function Login({validarErrores}) {
         handleForm={handleLogin}
         subtitulo={'Iniciar sesión'}
         textBtn={'Iniciar sesión'}
-        error={error.error}
-        classError={clasError}
+        error={errorFrom.error}
         children={
           <>
             <Inputs
               name={'email'}
               texto={'Ingrese email'}
               tipo={'email'}
-              handleOnChange={(e) => handleChange(e)}
+              handleOnChange={(e) => onchange(e)}
               valor={usuario.email}
-              error={error.email}
+              error={errorFrom.email}
               autocomplete={true}
               requerido={true}
             />
@@ -102,16 +33,26 @@ function Login({validarErrores}) {
               name={'password'}
               texto={'Ingrese contraseña'}
               tipo={'password'}
-              handleOnChange={(e) => handleChange(e)}
+              handleOnChange={(e) => onchange(e)}
               valor={usuario.password}
-              error={error.password}
+              error={errorFrom.password}
               requerido={true}
             />
 
 
           </>
         }
-      />
+      />     
+      <Modal 
+        children={
+          <Cargando 
+          text={ loading || loadApi 
+            ? 'Iniciando sesión ...'
+            : `Error al iniciar sesión: ${errorLogin}`
+          }
+        />
+        }
+        />
     </>
   )
 }

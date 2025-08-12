@@ -8,6 +8,7 @@ import { leerCursos } from "../servicios/curso.service";
 import { URL_BASE } from "../endPoint/endpoint";
 import { io } from "socket.io-client";
 import { pedidoInicial } from "../hooks/pedido/cargar/pedidoFormDefault";
+import useApi from "../servicios/Api/useApi";
 
 const pedidoInicilLocal = [{...pedidoInicial}]
 

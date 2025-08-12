@@ -14,23 +14,6 @@ function UsuarioMayor() {
   const [isRegistro, setIsRegistro] = useState(false);
   const navigate = useNavigate();
 
-  const validarErrores = (user) => {
-    const newError = {
-      email:'',
-    password:'',
-    error:''
-    }
-    if(!user.email) {
-      newError.email = 'Debe agregar un email';
-      newError.error = 'La solicitud tiene errores';
-    }
-    if(!user.password) {
-      newError.password = 'Debe agregar una contraseña';
-      newError.error = 'La solicitud tiene errores';
-    }
-    return newError.error ? newError : null; 
-  };
-
   if (userLogin && userLogin.email ) return (
     <>
       <MiniNav
@@ -69,13 +52,9 @@ function UsuarioMayor() {
       />      
         <>
         {!isRegistro ? (
-          <Login 
-            validarErrores={validarErrores}
-          />
+          <Login />
         ): (
-          <Registro 
-            validarErrores={validarErrores}
-          />
+          <Registro />
         )}
         </>
     </>

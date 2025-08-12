@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useRetardo from "../../hooks/tiempo/useRetardo";
-import { useModalContext } from "../../contexto/modalContexto";
 
 function useApi(urlGet=null, adapterGet=null) {
     const [response, setResponse] = useState(null);
@@ -8,7 +7,7 @@ function useApi(urlGet=null, adapterGet=null) {
     const [errorFetch, setErrorFetch] = useState(null);
     const [controlador, setControlador] = useState(false);
     
-    const token = localStorage.getItem('token');
+    
 
     const retardoRecetRetardo = useRetardo(()=>{setResponse(null)}, 3000)
 
@@ -30,6 +29,7 @@ function useApi(urlGet=null, adapterGet=null) {
         }
 
         const controller = new AbortController();
+        const token = localStorage.getItem('token');
         try{
             const res = await fetch(urlLocal,{
                 method: methodo || 'GET',

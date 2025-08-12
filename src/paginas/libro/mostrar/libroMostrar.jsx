@@ -19,6 +19,7 @@ import { useGlobalContext } from '../../../contexto/contexto';
 function LibroMostrar() {
   const [buscador, setBuscador] = useState(()=>(libro)=>libro.nombre.toLowerCase().includes(''));
   const [alertaFiltro, setAlertaFiltro] = useState(false);
+  const [nuevoLibro, setNuevoLibro] = useState(false);
   const {datos} = useGlobalContext()
   const {
     errorFetch, loading
@@ -50,7 +51,7 @@ function LibroMostrar() {
             <li 
               className='btn-add' 
               title='Nuevo libro' 
-              onClick={() => {setAlertaFiltro(false), setEstadoModal(true)}}
+              onClick={() => {setNuevoLibro(true), setEstadoModal(true)}}
               ><img src={Add} alt='Nuevo libro' /></li>
           </>
         }
@@ -81,7 +82,8 @@ function LibroMostrar() {
           </>
           }/>
       )}
-      <Modal children={alertaFiltro ? <FiltrosLibros /> : <LibroCargar />}/>
+      <Modal children={<FiltrosLibros />} modal={alertaFiltro} setModal={setAlertaFiltro}/>
+      <Modal children={<LibroCargar />} modal={nuevoLibro} setModal={setNuevoLibro}/>
   </>
   )
 }

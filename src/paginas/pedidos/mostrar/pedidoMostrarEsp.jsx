@@ -15,7 +15,8 @@ import { useModalContext } from '../../../contexto/modalContexto';
 function PedidoMostrarEsp() {
   const { datos } = useContext(contexto);
   const navigate = useNavigate();
-  const {setEstadoModal}=useModalContext()
+  const {setEstadoModal}=useModalContext();
+  const [ordenar, setOrdenar] = useState(false)
 
   const handleAtras = () => {
     navigate(-1);
@@ -39,7 +40,7 @@ function PedidoMostrarEsp() {
           ><img src={LeftArrow} alt="Atras" /></li>
           <li 
             title="Ordenar"
-            onClick={()=>setEstadoModal(true)}
+            onClick={()=>{setEstadoModal(true), setOrdenar(true)}}
             className="btn-add"
           ><img src={Ordenar} alt="Ordenar" /></li>
           </>
@@ -71,7 +72,8 @@ function PedidoMostrarEsp() {
         <Modal 
           children={
             <FiltroOrdenarPedido />
-          }        
+          }  
+          modal={ordenar} setModal={setOrdenar}      
         />
     </>
   )
